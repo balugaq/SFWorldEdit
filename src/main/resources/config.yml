@@ -1,0 +1,14 @@
+# Auto update from Guizhan Build is enabled by default.
+auto-update: true
+
+# Language
+language: zh-CN
+
+worldedit:
+  modificationBlockLimit: 32768
+
+# Do not change this value unless you know what you are doing.
+config-version: 1
+
+# Do not change this value unless you know what you are doing.
+debug: false

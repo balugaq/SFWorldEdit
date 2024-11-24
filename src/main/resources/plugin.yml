@@ -1,0 +1,27 @@
+name: SFWorldEdit
+author: balugaq
+description: A Slimefun addon that make Slimefun world-editable
+main: com.balugaq.sfworldedit.implementation.SFWorldedit
+website: https://github.com/balugaq/SFWorldedit
+version: ${project.version}
+api-version: 1.20
+depend:
+  - Slimefun
+softdepend:
+  - GuizhanLibPlugin
+commands:
+  sfworldedit:
+    aliases: sfw
+    description: SFWorldedit command
+    usage: The SFWorldedit version you have installed does not seem to be compatible with your server setup. Check your console for more detailed info.
+
+permissions:
+  sfworldedit.admin:
+    description: Allows you to use all NetworksExpansion commands
+    default: op
+  sfworldedit.command.help:
+    description: Allows you to use the /networks help command
+    default: op
+  sfworldedit.command.reload:
+    description: Allows you to use the /sfworldedit reload command
+    default: op

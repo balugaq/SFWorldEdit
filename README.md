@@ -1,2 +1,2 @@
 # SFWorldEdit
-A slimefun addon that make slimefun world-editable
+A Slimefun addon that make Slimefun world-editable

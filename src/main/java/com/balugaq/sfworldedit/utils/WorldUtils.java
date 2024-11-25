@@ -7,6 +7,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 
+import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 import java.util.function.Consumer;
 
@@ -38,7 +39,7 @@ public class WorldUtils {
         }
     }
 
-    public static boolean copyBlockState(BlockState fromBlockState, Block toBlock) {
+    public static boolean copyBlockState(@Nonnull BlockState fromBlockState, @Nonnull Block toBlock) {
         if (!success) {
             return false;
         }
@@ -59,17 +60,17 @@ public class WorldUtils {
         }
     }
 
-    public static String locationToString(Location l) {
+    public static String locationToString(@Nonnull Location l) {
         if (l == null) {
-            return SFWorldedit.getInstance().getLocalizationService().getString("unknown_location");
+            return SFWorldedit.getInstance().getLocalizationService().getString("messages.error.unknown-location");
         }
         if (l.getWorld() == null) {
-            return SFWorldedit.getInstance().getLocalizationService().getString("unknown_world");
+            return SFWorldedit.getInstance().getLocalizationService().getString("messages.error.unknown-world");
         }
         return l.getWorld().getName() + "," + l.getBlockX() + "," + l.getBlockY() + "," + l.getBlockZ();
     }
 
-    public static long locationRange(Location pos1, Location pos2) {
+    public static long locationRange(@Nonnull Location pos1, @Nonnull Location pos2) {
         if (pos1 == null || pos2 == null) {
             return 0;
         }
@@ -83,7 +84,7 @@ public class WorldUtils {
         return (long) (Math.abs(upX - downX) + 1) * (Math.abs(upY - downY) + 1) * (Math.abs(upZ - downZ) + 1);
     }
 
-    public static void doWorldEdit(Location pos1, Location pos2, Consumer<Location> consumer) {
+    public static void doWorldEdit(@Nonnull Location pos1, @Nonnull Location pos2, @Nonnull Consumer<Location> consumer) {
         if (pos1 == null || pos2 == null) {
             return;
         }

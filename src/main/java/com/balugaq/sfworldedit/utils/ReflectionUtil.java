@@ -3,6 +3,8 @@ package com.balugaq.sfworldedit.utils;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.Pair;
 import lombok.experimental.UtilityClass;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -13,7 +15,7 @@ import java.lang.reflect.Method;
 @UtilityClass
 public class ReflectionUtil {
 
-    public static boolean setValue(Object object, String field, Object value) {
+    public static boolean setValue(@Nonnull Object object, @Nonnull String field, @Nonnull Object value) {
         try {
             Field declaredField = object.getClass().getDeclaredField(field);
             declaredField.setAccessible(true);
@@ -25,7 +27,7 @@ public class ReflectionUtil {
         return true;
     }
 
-    public static <T> boolean setStaticValue(Class<T> clazz, String field, Object value) {
+    public static <T> boolean setStaticValue(@Nonnull Class<T> clazz, @Nonnull String field, @Nonnull Object value) {
         try {
             Field declaredField = clazz.getDeclaredField(field);
             declaredField.setAccessible(true);
@@ -37,7 +39,8 @@ public class ReflectionUtil {
         return true;
     }
 
-    public static Method getMethod(Class<?> clazz, String methodName) {
+    @Nullable
+    public static Method getMethod(@Nonnull Class<?> clazz, @Nonnull String methodName) {
         while (clazz != Object.class) {
             for (Method method : clazz.getDeclaredMethods()) {
                 if (method.getName().equals(methodName)) {
@@ -49,7 +52,8 @@ public class ReflectionUtil {
         return null;
     }
 
-    public static Field getField(Class<?> clazz, String fieldName) {
+    @Nullable
+    public static Field getField(@Nonnull Class<?> clazz, @Nonnull String fieldName) {
         while (clazz != Object.class) {
             for (Field field : clazz.getDeclaredFields()) {
                 if (field.getName().equals(fieldName)) {
@@ -61,7 +65,8 @@ public class ReflectionUtil {
         return null;
     }
 
-    public static <T, V> T getProperty(Object o, Class<V> clazz, String fieldName) throws IllegalAccessException {
+    @Nullable
+    public static <T, V> T getProperty(@Nonnull Object o, @Nonnull Class<V> clazz, @Nonnull String fieldName) throws IllegalAccessException {
         Field field = getField(clazz, fieldName);
         if (field != null) {
             boolean b = field.canAccess(o);
@@ -74,7 +79,8 @@ public class ReflectionUtil {
         return null;
     }
 
-    public static Pair<Field, Class<?>> getDeclaredFieldsRecursively(Class<?> clazz, String fieldName) {
+    @Nullable
+    public static Pair<Field, Class<?>> getDeclaredFieldsRecursively(@Nonnull Class<?> clazz, @Nonnull String fieldName) {
         try {
             Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);

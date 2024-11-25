@@ -12,7 +12,6 @@ import java.util.List;
 /**
  * @author Final_ROOT
  * @author balugaq
- * @since 2.0
  */
 public class ParticleUtil {
     private static final double[] BLOCK_CUBE_OFFSET_X = new double[]{0, 1, 0, 0, 1, 1, 0, 1};
@@ -131,7 +130,7 @@ public class ParticleUtil {
         }
     }
 
-    public static void drawCubeByLocations(@Nonnull Plugin plugin, @Nonnull Particle particle, long interval, List<Location> locationList) {
+    public static void drawCubeByLocations(@Nonnull Plugin plugin, @Nonnull Particle particle, long interval, @Nonnull List<Location> locationList) {
         Location[] locations = new Location[locationList.size()];
         for (int i = 0; i < locationList.size(); i++) {
             locations[i] = locationList.get(i);

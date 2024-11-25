@@ -64,12 +64,12 @@ public class LocalizationService {
     private Pattern pattern = Pattern.compile(this.colorTagRegex);
 
     @ParametersAreNonnullByDefault
-    public LocalizationService(JavaPlugin plugin) {
+    public LocalizationService(@Nonnull JavaPlugin plugin) {
         this(plugin, "lang");
     }
 
     @ParametersAreNonnullByDefault
-    public LocalizationService(JavaPlugin plugin, String folderName) {
+    public LocalizationService(@Nonnull JavaPlugin plugin, @Nonnull String folderName) {
         this.languages = new LinkedList<>();
         this.langMap = new LinkedHashMap<>();
         Preconditions.checkArgument(plugin != null, "The plugin instance should not be null");
@@ -88,19 +88,19 @@ public class LocalizationService {
     }
 
     @ParametersAreNonnullByDefault
-    public LocalizationService(JavaPlugin plugin, String folderName, String langFile) {
+    public LocalizationService(@Nonnull JavaPlugin plugin, @Nonnull String folderName, @Nonnull String langFile) {
         this(plugin, folderName);
         this.addLanguage(langFile);
     }
 
     @ParametersAreNonnullByDefault
     @Nonnull
-    public String getString(String key, Object... args) {
+    public String getString(@Nonnull String key, @Nonnull Object... args) {
         return MessageFormat.format(getString(key), args);
     }
 
     @ParametersAreNonnullByDefault
-    public void sendMessage(CommandSender sender, String messageKey, Object... args) {
+    public void sendMessage(@Nonnull CommandSender sender, @Nonnull String messageKey, @Nonnull Object... args) {
         Preconditions.checkArgument(sender != null, "CommandSender cannot be null");
         Preconditions.checkArgument(messageKey != null, "Message key cannot be null");
 
@@ -188,7 +188,7 @@ public class LocalizationService {
 
     @Nonnull
     @ParametersAreNonnullByDefault
-    public SlimefunItemStack getItemBy(String key, String id, Material material, String... extraLore) {
+    public SlimefunItemStack getItemBy(@Nonnull String key, @Nonnull String id, @Nonnull Material material, @Nonnull String... extraLore) {
         Preconditions.checkArgument(key != null, MSG_KEY_NULL);
         Preconditions.checkArgument(id != null, MSG_ID_NULL);
         Preconditions.checkArgument(material != null, MSG_MATERIAL_NULL);
@@ -201,7 +201,7 @@ public class LocalizationService {
 
     @Nonnull
     @ParametersAreNonnullByDefault
-    public SlimefunItemStack getItemBy(String key, String id, String texture, String... extraLore) {
+    public SlimefunItemStack getItemBy(@Nonnull String key, @Nonnull String id, @Nonnull String texture, @Nonnull String... extraLore) {
         Preconditions.checkArgument(key != null, MSG_KEY_NULL);
         Preconditions.checkArgument(id != null, MSG_ID_NULL);
         Preconditions.checkArgument(texture != null, MSG_TEXTURE_NULL);
@@ -210,7 +210,7 @@ public class LocalizationService {
 
     @Nonnull
     @ParametersAreNonnullByDefault
-    public SlimefunItemStack getItemBy(String key, String id, ItemStack itemStack, String... extraLore) {
+    public SlimefunItemStack getItemBy(@Nonnull String key, @Nonnull String id, @Nonnull ItemStack itemStack, @Nonnull String... extraLore) {
         Preconditions.checkArgument(key != null, MSG_KEY_NULL);
         Preconditions.checkArgument(id != null, MSG_ID_NULL);
         Preconditions.checkArgument(itemStack != null, MSG_ITEMSTACK_NULL);
@@ -219,69 +219,69 @@ public class LocalizationService {
 
     @Nonnull
     @ParametersAreNonnullByDefault
-    public SlimefunItemStack getItemGroupItem(String id, Material material) {
+    public SlimefunItemStack getItemGroupItem(@Nonnull String id, @Nonnull Material material) {
         return this.getItemBy(this.itemGroupKey, id, material);
     }
 
     @Nonnull
     @ParametersAreNonnullByDefault
-    public SlimefunItemStack getItemGroupItem(String id, String texture) {
+    public SlimefunItemStack getItemGroupItem(@Nonnull String id, @Nonnull String texture) {
         return this.getItemBy(this.itemGroupKey, id, texture);
     }
 
     @Nonnull
     @ParametersAreNonnullByDefault
-    public SlimefunItemStack getItemGroupItem(String id, ItemStack itemStack) {
+    public SlimefunItemStack getItemGroupItem(@Nonnull String id, @Nonnull ItemStack itemStack) {
         return this.getItemBy(this.itemGroupKey, id, itemStack);
     }
 
-    public SlimefunItemStack getItem(String id, Material material, String... extraLore) {
+    public SlimefunItemStack getItem(@Nonnull String id, @Nonnull Material material, @Nonnull String... extraLore) {
         return this.getItemBy(this.itemsKey, id, material, extraLore);
     }
 
     @Nonnull
     @ParametersAreNonnullByDefault
-    public SlimefunItemStack getItem(String id, String texture, String... extraLore) {
+    public SlimefunItemStack getItem(@Nonnull String id, @Nonnull String texture, @Nonnull String... extraLore) {
         return this.getItemBy(this.itemsKey, id, texture, extraLore);
     }
 
     @Nonnull
     @ParametersAreNonnullByDefault
-    public SlimefunItemStack getItem(String id, ItemStack itemStack, String... extraLore) {
+    public SlimefunItemStack getItem(@Nonnull String id, @Nonnull ItemStack itemStack, @Nonnull String... extraLore) {
         return this.getItemBy(this.itemsKey, id, itemStack, extraLore);
     }
 
     @Nonnull
     @ParametersAreNonnullByDefault
-    public RecipeType getRecipeType(String id, Material material, String... extraLore) {
+    public RecipeType getRecipeType(@Nonnull String id, @Nonnull Material material, @Nonnull String... extraLore) {
         return new RecipeType(new NamespacedKey(this.getPlugin(), id), this.getItemBy(this.recipesKey, id, material, extraLore));
     }
 
     @Nonnull
     @ParametersAreNonnullByDefault
-    public RecipeType getRecipeType(String id, String texture, String... extraLore) {
+    public RecipeType getRecipeType(@Nonnull String id, @Nonnull String texture, @Nonnull String... extraLore) {
         return new RecipeType(new NamespacedKey(this.getPlugin(), id), this.getItemBy(this.recipesKey, id, texture, extraLore));
     }
 
     @Nonnull
     @ParametersAreNonnullByDefault
-    public RecipeType getRecipeType(String id, ItemStack itemStack, String... extraLore) {
+    public RecipeType getRecipeType(@Nonnull String id, @Nonnull ItemStack itemStack, @Nonnull String... extraLore) {
         return new RecipeType(new NamespacedKey(this.getPlugin(), id), this.getItemBy(this.recipesKey, id, itemStack, extraLore));
     }
 
-    public void setIdPrefix(String idPrefix) {
+    public void setIdPrefix(@Nonnull String idPrefix) {
         this.idPrefix = idPrefix;
     }
 
-    public void setItemGroupKey(String itemGroupKey) {
+    public void setItemGroupKey(@Nonnull String itemGroupKey) {
         this.itemGroupKey = itemGroupKey;
     }
 
-    public void setItemsKey(String itemsKey) {
+    public void setItemsKey(@Nonnull String itemsKey) {
         this.itemsKey = itemsKey;
     }
 
-    public void setRecipesKey(String recipesKey) {
+    public void setRecipesKey(@Nonnull String recipesKey) {
         this.recipesKey = recipesKey;
     }
 
@@ -322,13 +322,25 @@ public class LocalizationService {
     }
 
     @ParametersAreNonnullByDefault
-    public void send(CommandSender sender, String message, Object... args) {
-        sender.sendMessage(color(MessageFormat.format(message, args)));
+    public void send(@Nonnull CommandSender sender, @Nonnull String messageKey, @Nonnull Object... args) {
+        sender.sendMessage(color(MessageFormat.format(getString("messages." + messageKey), args)));
+    }
+
+    @ParametersAreNonnullByDefault
+    public void sendList(@Nonnull CommandSender sender, @Nonnull String messageKey) {
+        List<String> list = getStringList(messageKey);
+        if (list == null || list.isEmpty()) {
+            return;
+        }
+
+        for (String line : list) {
+            sender.sendMessage(color(line));
+        }
     }
 
     @Nonnull
     @ParametersAreNonnullByDefault
-    public ItemStack getItemStack(String key, Material material) {
+    public ItemStack getItemStack(@Nonnull String key, @Nonnull Material material) {
         return new CustomItemStack(material, this.getString(key + KEY_NAME), this.getStringArray(key + KEY_LORE));
     }
 }

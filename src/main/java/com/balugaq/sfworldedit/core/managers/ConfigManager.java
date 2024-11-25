@@ -5,6 +5,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.io.File;
 import java.io.IOException;
@@ -13,11 +15,10 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 public class ConfigManager implements IManager {
-    private final ISFWorldEdit plugin;
+    private ISFWorldEdit plugin;
 
-    public ConfigManager(ISFWorldEdit plugin) {
+    public ConfigManager(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
-        setupDefaultConfig();
     }
 
     private void setupDefaultConfig() {
@@ -45,7 +46,7 @@ public class ConfigManager implements IManager {
     }
 
     @ParametersAreNonnullByDefault
-    private void checkKey(FileConfiguration existingConfig, FileConfiguration resourceConfig, String key) {
+    private void checkKey(@Nonnull FileConfiguration existingConfig, @Nonnull FileConfiguration resourceConfig, @Nonnull String key) {
         final Object currentValue = existingConfig.get(key);
         final Object newValue = resourceConfig.get(key);
         if (newValue instanceof ConfigurationSection section) {
@@ -64,12 +65,26 @@ public class ConfigManager implements IManager {
     public boolean isDebug() {
         return plugin.getConfig().getBoolean("debug");
     }
+    public int getModificationBlockLimit() {
+        return plugin.getConfig().getInt("worldedit.modification-block-limit");
+    }
 
+    @Nullable
     public String getLanguage() {
         return plugin.getConfig().getString("language");
     }
 
     public void saveAll() {
         plugin.getLogger().info(plugin.getLocalizationService().getString("messages.save-all"));
+    }
+
+    @Override
+    public void onLoad() {
+        setupDefaultConfig();
+    }
+
+    @Override
+    public void onUnload() {
+        this.plugin = null;
     }
 }

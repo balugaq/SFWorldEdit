@@ -1,5 +1,6 @@
 package com.balugaq.sfworldedit.core.commands;
 
+import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
 import com.balugaq.sfworldedit.utils.CommandUtil;
 import com.balugaq.sfworldedit.utils.PermissionUtil;
@@ -59,8 +60,8 @@ public class Clear extends SubCommand {
 
         plugin.send(player, "command.clear.start", WorldUtils.locationToString(pos1), WorldUtils.locationToString(pos2));
 
-        final boolean callHandler = CommandUtil.hasFlag(args, "callhandler");
-        final boolean skipVanilla = CommandUtil.hasFlag(args, "skipvanilla");
+        final boolean callHandler = CommandUtil.hasFlag(args, "callhandler") || CommandUtil.hasFlag(args, "c");
+        final boolean skipVanilla = CommandUtil.hasFlag(args, "skipvanilla") || CommandUtil.hasFlag(args, "s");
         final long currentMillSeconds = System.currentTimeMillis();
         final AtomicInteger count = new AtomicInteger();
         WorldUtils.doWorldEdit(pos1, pos2, (location -> {

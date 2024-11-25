@@ -1,8 +1,10 @@
 package com.balugaq.sfworldedit.core.commands;
 
+import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
 import com.balugaq.sfworldedit.utils.PermissionUtil;
 import com.balugaq.sfworldedit.utils.WorldUtils;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -33,10 +35,12 @@ public class SetPos1 extends SubCommand {
         }
 
         plugin.getCommandManager().setPos1(player.getUniqueId(), player.getLocation().getBlock().getLocation());
-        if (plugin.getCommandManager().getPos2(player.getUniqueId()) != null) {
-            plugin.send(player, "command.setpos1.success-with-range", WorldUtils.locationRange(plugin.getCommandManager().getPos1(player.getUniqueId()), plugin.getCommandManager().getPos2(player.getUniqueId())));
+        Location pos1 = plugin.getCommandManager().getPos1(player.getUniqueId());
+        Location pos2 = plugin.getCommandManager().getPos2(player.getUniqueId());
+        if (pos2 != null) {
+            plugin.send(player, "command.setpos1.success-with-range", WorldUtils.locationToString(pos1), WorldUtils.locationRange(pos1, pos2));
         } else {
-            plugin.send(player, "command.setpos1.success", plugin.getCommandManager().getPos1(player.getUniqueId()));
+            plugin.send(player, "command.setpos1.success", WorldUtils.locationToString(pos1));
         }
         return true;
     }

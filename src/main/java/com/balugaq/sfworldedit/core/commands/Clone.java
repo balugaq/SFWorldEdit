@@ -1,5 +1,6 @@
 package com.balugaq.sfworldedit.core.commands;
 
+import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
 import com.balugaq.sfworldedit.utils.CommandUtil;
 import com.balugaq.sfworldedit.utils.PermissionUtil;
@@ -58,14 +59,14 @@ public class Clone extends SubCommand {
         }
 
         if (!Objects.equals(pos1.getWorld().getUID(), pos2.getWorld().getUID())) {
-            plugin.send(player, "error.world-not-match");
+            plugin.send(player, "error.world-mismatch");
             return false;
         }
 
         plugin.send(player, "command.clone.start", WorldUtils.locationToString(pos1), WorldUtils.locationToString(pos2));
         final long currentMillSeconds = System.currentTimeMillis();
 
-        final boolean overrideData = CommandUtil.hasFlag(args, "override");
+        final boolean override = CommandUtil.hasFlag(args, "override") || CommandUtil.hasFlag(args, "o");
         final AtomicInteger count = new AtomicInteger();
         final Location playerLocation = player.getLocation();
         final ItemStack itemInHand = player.getItemInHand();
@@ -107,7 +108,7 @@ public class Clone extends SubCommand {
                 ));
 
                 SlimefunBlockData fromSlimefunBlockData = Slimefun.getDatabaseManager().getBlockDataController().getBlockData(fromLocation);
-                if (overrideData) {
+                if (override) {
                     Slimefun.getDatabaseManager().getBlockDataController().removeBlock(toLocation);
                 }
 

@@ -16,7 +16,7 @@ public final class Language {
     private final FileConfiguration currentConfig;
 
     @ParametersAreNonnullByDefault
-    public Language(String lang, File currentFile, FileConfiguration defaultConfig) {
+    public Language(@Nonnull String lang, @Nonnull File currentFile, @Nonnull FileConfiguration defaultConfig) {
         Preconditions.checkArgument(lang != null, "Language key cannot be null");
         Preconditions.checkArgument(currentFile != null, "Current file cannot be null");
         Preconditions.checkArgument(defaultConfig != null, "default config cannot be null");

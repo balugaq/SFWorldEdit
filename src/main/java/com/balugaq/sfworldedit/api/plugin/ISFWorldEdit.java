@@ -15,6 +15,10 @@ public abstract class ISFWorldEdit extends JavaPlugin implements SlimefunAddon  
         getLocalizationService().send(sender, messageKey, args);
     }
 
+    public void sendList(@Nonnull CommandSender sender, @Nonnull String messageKey) {
+        getLocalizationService().sendList(sender, messageKey);
+    }
+
     @Nonnull
     public abstract CommandManager getCommandManager();
 }

@@ -10,18 +10,83 @@ depend:
 softdepend:
   - GuizhanLibPlugin
 commands:
-  sfworldedit:
-    aliases: sfw
-    description: SFWorldedit command
-    usage: The SFWorldedit version you have installed does not seem to be compatible with your server setup. Check your console for more detailed info.
+  sfwhelp:
+    aliases:
+      - /shelp
+  sfwreload:
+    aliases:
+      - /sreload
+  sfwversion:
+    aliases:
+      - /sversion
+  sfwpos1:
+    aliases:
+      - /spos1
+  sfwpos2:
+    aliases:
+      - /spos2
+  sfwclearpos:
+    aliases:
+      - /sclearpos
+  sfwpaste:
+    aliases:
+      - /spaste
+  sfwclear:
+    aliases:
+      - /sclear
+  sfwclone:
+    aliases:
+      - /sclone
+  sfwblockmenuslotset:
+    aliases:
+      - /sblockmenuslotset
+  sfwblockinfoadd:
+    aliases:
+      - /sblockinfoadd
+  sfwblockinforemove:
+    aliases:
+      - /sblockinforemove
 
 permissions:
   sfworldedit.admin:
-    description: Allows you to use all NetworksExpansion commands
+    description: Allows you to use all SFWorldedit commands
+    default: op
+  sfworldedit.command.admin:
+    description: Allows you to use all the SFWorldedit commands
     default: op
   sfworldedit.command.help:
-    description: Allows you to use the /networks help command
+    description: Allows you to use the //shelp command
     default: op
   sfworldedit.command.reload:
-    description: Allows you to use the /sfworldedit reload command
+    description: Allows you to use the //sreload command
+    default: op
+  sfworldedit.command.version:
+    description: Allows you to use the //sversion command
+    default: op
+  sfworldedit.command.pos1:
+    description: Allows you to use the //spos1 command
+    default: op
+  sfworldedit.command.pos2:
+    description: Allows you to use the //spos2 command
+    default: op
+  sfworldedit.command.clearpos:
+    description: Allows you to use the //sclearpos command
+    default: op
+  sfworldedit.command.paste:
+    description: Allows you to use the //spaste command
+    default: op
+  sfworldedit.command.clear:
+    description: Allows you to use the //sclear command
+    default: op
+  sfworldedit.command.clone:
+    description: Allows you to use the //sclone command
+    default: op
+  sfworldedit.command.blockmenuslotset:
+    description: Allows you to use the //sblockmenuslotset command
+    default: op
+  sfworldedit.command.blockinfoadd:
+    description: Allows you to use the //sblockinfoadd command
+    default: op
+  sfworldedit.command.blockinforemove:
+    description: Allows you to use the //sblockinforemove command
     default: op

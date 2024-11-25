@@ -9,6 +9,7 @@ import com.google.common.base.Preconditions;
 import io.github.thebusybiscuit.slimefun4.utils.NumberUtils;
 import lombok.Getter;
 import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
+import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
@@ -25,6 +26,7 @@ import java.text.MessageFormat;
 @SuppressWarnings("unused")
 @Getter
 public class SFWorldedit extends ISFWorldEdit {
+    private static final String DEFAULT_LANGUAGE = "zh-CN";
     private static final int RECOMMENDED_JAVA_VERSION = 17;
     private static final MinecraftVersion RECOMMENDED_MC_VERSION = MinecraftVersion.MINECRAFT_1_16;
     private static SFWorldedit instance;
@@ -59,6 +61,7 @@ public class SFWorldedit extends ISFWorldEdit {
         return getInstance().minecraftVersion;
     }
 
+    @Nonnull
     public static SFWorldedit getInstance() {
         Preconditions.checkArgument(instance != null, "SFWorldedit has not been enabled yet！");
         return SFWorldedit.instance;
@@ -72,9 +75,12 @@ public class SFWorldedit extends ISFWorldEdit {
         getLogger().info("Loading Config Manager...");
         saveDefaultConfig();
         this.configManager = new ConfigManager(this);
+        this.configManager.onLoad();
 
-        getLogger().info("正在加载语言文件...");
+        getLogger().info("Loading Localization Service...");
         this.localizationService = new LocalizationService(this);
+        this.localizationService.addLanguage(this.configManager.getLanguage());
+        this.localizationService.addLanguage(DEFAULT_LANGUAGE);
 
         // Checking environment compatibility
         boolean isCompatible = environmentCheck();
@@ -87,6 +93,9 @@ public class SFWorldedit extends ISFWorldEdit {
 
         getLogger().info("尝试自动更新...");
         tryUpdate();
+
+        getLogger().info("正在加载物品");
+        SFWItemsSetup.setup(this);
 
         getLogger().info("正在注册指令");
         this.commandManager = new CommandManager(this);
@@ -103,29 +112,33 @@ public class SFWorldedit extends ISFWorldEdit {
     public void onDisable() {
         Preconditions.checkArgument(instance != null, "SFWorldedit has not been enabled yet！");
 
-        // Managers
         this.commandManager.onUnload();
-        this.configManager.onUnload();
-        
         this.commandManager = null;
-        this.configManager = null;
 
-        // Other fields
+        this.localizationService = null;
+
         this.minecraftVersion = null;
         this.javaVersion = 0;
 
-        // Clear instance
+        this.configManager.onUnload();
+        this.configManager = null;
+
         instance = null;
         getLogger().info("成功禁用此附属");
     }
 
     public void tryUpdate() {
         try {
-            if (getConfigManager().isAutoUpdate() && getDescription().getVersion().startsWith("Build")) {
-                GuizhanUpdater.start(this, getFile(), username, repo, branch);
+            try {
+                if (getConfigManager().isAutoUpdate() && getDescription().getVersion().startsWith("Build")) {
+                    GuizhanUpdater.start(this, getFile(), username, repo, branch);
+                }
+            } catch (UnsupportedClassVersionError ignored) {
+                getLogger().warning("自动更新失败！");
             }
-        } catch (UnsupportedClassVersionError ignored) {
+        } catch (Exception e) {
             getLogger().warning("自动更新失败！");
+            e.printStackTrace();
         }
     }
 
@@ -179,5 +192,10 @@ public class SFWorldedit extends ISFWorldEdit {
     @Override
     public LocalizationService getLocalizationService() {
         return getInstance().localizationService;
+    }
+
+    @Nonnull
+    public NamespacedKey newKey(@Nonnull String key) {
+        return new NamespacedKey(this, key);
     }
 }

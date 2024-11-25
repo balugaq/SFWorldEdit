@@ -1,5 +1,6 @@
 package com.balugaq.sfworldedit.core.commands;
 
+import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
 import com.balugaq.sfworldedit.utils.CommandUtil;
 import com.balugaq.sfworldedit.utils.PermissionUtil;
@@ -35,11 +36,11 @@ public class Paste extends SubCommand {
     private static final String KEY = "paste";
     private static final List<String> FLAGS = List.of("override", "force");
     private final ISFWorldEdit plugin;
-    public Paste(ISFWorldEdit plugin) {
+    public Paste(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] args) {
+    public boolean onCommand(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
         if (!PermissionUtil.hasPermission(commandSender, this)) {
             plugin.send(commandSender, "error.no-permission");
             return false;
@@ -56,8 +57,8 @@ public class Paste extends SubCommand {
         }
 
         final String sfid = args[0];
-        final boolean overrideData = CommandUtil.hasFlag(args, "override");
-        final boolean force = CommandUtil.hasFlag(args, "force");
+        final boolean override = CommandUtil.hasFlag(args, "override") || CommandUtil.hasFlag(args, "o");
+        final boolean force = CommandUtil.hasFlag(args, "force") || CommandUtil.hasFlag(args, "f");
         final SlimefunItem sfItem = SlimefunItem.getById(sfid);
 
         Location pos1 = plugin.getCommandManager().getPos1(player.getUniqueId());
@@ -69,7 +70,7 @@ public class Paste extends SubCommand {
         }
 
         if (!Objects.equals(pos1.getWorld().getUID(), pos2.getWorld().getUID())) {
-            plugin.send(player, "error.world-not-match");
+            plugin.send(player, "error.world-mismatch");
             return false;
         }
 
@@ -129,7 +130,7 @@ public class Paste extends SubCommand {
                             EquipmentSlot.HAND
                     )
             ));
-            if (overrideData) {
+            if (override) {
                 Slimefun.getDatabaseManager().getBlockDataController().removeBlock(location);
             }
             if (!StorageCacheUtils.hasBlock(location)) {
@@ -142,7 +143,7 @@ public class Paste extends SubCommand {
             count.addAndGet(1);
         }));
 
-        plugin.send(player, "command.paste.done", count.get(), System.currentTimeMillis() - currentMillSeconds);
+        plugin.send(player, "command.paste.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
         return true;
     }
 
@@ -169,7 +170,7 @@ public class Paste extends SubCommand {
         List<String> left = new ArrayList<>();
         for (String flag : FLAGS) {
             if (!CommandUtil.hasFlag(args, flag)) {
-                left.add(flag);
+                left.add("-" + flag);
             }
         }
         return left;

@@ -1,4 +1,4 @@
-package com.balugaq.sfworldedit.core.commands;
+package com.balugaq.sfworldedit.api.objects;
 
 import org.bukkit.command.TabExecutor;
 

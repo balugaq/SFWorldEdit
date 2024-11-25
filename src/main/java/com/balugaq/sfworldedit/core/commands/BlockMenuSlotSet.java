@@ -1,21 +1,16 @@
 package com.balugaq.sfworldedit.core.commands;
 
+import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
 import com.balugaq.sfworldedit.utils.CommandUtil;
 import com.balugaq.sfworldedit.utils.PermissionUtil;
 import com.balugaq.sfworldedit.utils.WorldUtils;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
-import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
-import io.github.thebusybiscuit.slimefun4.core.handlers.BlockBreakHandler;
-import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
@@ -58,22 +53,28 @@ public class BlockMenuSlotSet extends SubCommand {
             return false;
         }
 
-        plugin.send(player, "command.blockmenuslotset.start", WorldUtils.locationToString(pos1), WorldUtils.locationToString(pos2));
-
         if (!CommandUtil.hasArgFlag(args, "slot")) {
+            plugin.send(player, "error.missing-argument", "slot");
+            return false;
+        }
+
+        String s = CommandUtil.getArgFlag(args, "slot");
+        if (s == null) {
             plugin.send(player, "error.missing-argument", "slot");
             return false;
         }
 
         int slot;
         try {
-            slot = Integer.parseInt(CommandUtil.getArgFlag(args, "slot"));
+            slot = Integer.parseInt(s);
         } catch (NumberFormatException e) {
-            plugin.send(player, "error.invalid-slot");
+            plugin.send(player, "error.invalid-argument", s);
             return false;
         }
 
         ItemStack hand = player.getInventory().getItemInMainHand();
+
+        plugin.send(player, "command.blockmenuslotset.start", WorldUtils.locationToString(pos1), WorldUtils.locationToString(pos2));
 
         final long currentMillSeconds = System.currentTimeMillis();
         final AtomicInteger count = new AtomicInteger();

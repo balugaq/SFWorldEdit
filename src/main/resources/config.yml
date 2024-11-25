@@ -5,7 +5,7 @@ auto-update: true
 language: zh-CN
 
 worldedit:
-  modificationBlockLimit: 32768
+  modification-block-limit: 32768
 
 # Do not change this value unless you know what you are doing.
 config-version: 1

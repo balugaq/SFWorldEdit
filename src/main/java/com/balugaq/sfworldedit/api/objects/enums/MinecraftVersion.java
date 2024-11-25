@@ -3,6 +3,8 @@ package com.balugaq.sfworldedit.api.objects.enums;
 import io.github.thebusybiscuit.slimefun4.libraries.paperlib.PaperLib;
 import lombok.Getter;
 
+import javax.annotation.Nonnull;
+
 @Getter
 public enum MinecraftVersion {
     MINECRAFT_1_16(16, 0),
@@ -57,6 +59,7 @@ public enum MinecraftVersion {
         this.minor = minor;
     }
 
+    @Nonnull
     public static MinecraftVersion of(int major, int minor) {
         for (MinecraftVersion version : values()) {
             if (version.major == major && version.minor == minor) {
@@ -66,17 +69,18 @@ public enum MinecraftVersion {
         return UNKNOWN;
     }
 
+    @Nonnull
     public static MinecraftVersion getCurrentVersion() {
         int major = PaperLib.getMinecraftVersion();
         int minor = PaperLib.getMinecraftPatchVersion();
         return of(major, minor);
     }
 
-    public boolean isAtLeast(MinecraftVersion version) {
+    public boolean isAtLeast(@Nonnull MinecraftVersion version) {
         return this.major > version.major || (this.major == version.major && this.minor >= version.minor);
     }
 
-    public boolean isBelow(MinecraftVersion version) {
+    public boolean isBelow(@Nonnull MinecraftVersion version) {
         return this.major < version.major || (this.major == version.major && this.minor < version.minor);
     }
 

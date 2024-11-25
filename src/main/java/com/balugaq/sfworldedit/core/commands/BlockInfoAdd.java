@@ -1,22 +1,25 @@
 package com.balugaq.sfworldedit.core.commands;
 
+import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
-import com.balugaq.sfworldedit.utils.CommandUtil;
 import com.balugaq.sfworldedit.utils.PermissionUtil;
 import com.balugaq.sfworldedit.utils.WorldUtils;
+import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
-import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
+import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class BlockInfoAdd extends SubCommand {
@@ -52,8 +55,6 @@ public class BlockInfoAdd extends SubCommand {
             return false;
         }
 
-        plugin.send(player, "command.blockinfoadd.start", WorldUtils.locationToString(pos1), WorldUtils.locationToString(pos2));
-
         if (args.length == 0) {
             plugin.send(player, "error.missing-argument", "key");
             return false;
@@ -63,6 +64,8 @@ public class BlockInfoAdd extends SubCommand {
             plugin.send(player, "error.missing-argument", "value");
             return false;
         }
+
+        plugin.send(player, "command.blockinfoadd.start", WorldUtils.locationToString(pos1), WorldUtils.locationToString(pos2));
 
         final String key = args[0];
         final String value = args[1];
@@ -83,7 +86,24 @@ public class BlockInfoAdd extends SubCommand {
     @Nonnull
     @ParametersAreNonnullByDefault
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
-        return new ArrayList<>();
+        if (!(commandSender instanceof Player player)) {
+            return new ArrayList<>();
+        }
+
+        Block block = player.getTargetBlockExact(8, FluidCollisionMode.NEVER);
+        if (block == null) {
+            return new ArrayList<>();
+        }
+
+        SlimefunBlockData data = StorageCacheUtils.getBlock(block.getLocation());
+        if (data == null) {
+            return new ArrayList<>();
+        }
+
+        Set<String> keys = new HashSet<>(data.getAllData().keySet());
+        keys.add("energy-charge");
+
+        return keys.stream().toList();
     }
 
     @Override

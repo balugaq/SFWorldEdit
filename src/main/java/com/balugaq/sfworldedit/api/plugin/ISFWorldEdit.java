@@ -8,9 +8,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
 
-public abstract class ISFWorldEdit extends JavaPlugin implements SlimefunAddon  {
+public abstract class ISFWorldEdit extends JavaPlugin implements SlimefunAddon {
     @Nonnull
     public abstract LocalizationService getLocalizationService();
+
     public void send(@Nonnull CommandSender sender, @Nonnull String messageKey, @Nonnull Object... args) {
         getLocalizationService().send(sender, messageKey, args);
     }

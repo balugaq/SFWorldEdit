@@ -13,14 +13,17 @@ import java.util.List;
 public class Help extends SubCommand {
     private static final String KEY = "help";
     private final ISFWorldEdit plugin;
+
+    public Help(@Nonnull ISFWorldEdit plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     @Nonnull
     public String getKey() {
         return KEY;
     }
-    public Help(@Nonnull ISFWorldEdit plugin) {
-        this.plugin = plugin;
-    }
+
     @Override
     @ParametersAreNonnullByDefault
     public boolean onCommand(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {

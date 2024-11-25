@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class BlockInfoRemove extends SubCommand {
     private static final String KEY = "blockinforemove";
     private final ISFWorldEdit plugin;
+
     public BlockInfoRemove(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }
@@ -61,7 +62,7 @@ public class BlockInfoRemove extends SubCommand {
         }
 
         plugin.send(player, "command.blockinforemove.start", WorldUtils.locationToString(pos1), WorldUtils.locationToString(pos2));
-        
+
         final String key = args[0];
         final long currentMillSeconds = System.currentTimeMillis();
         final AtomicInteger count = new AtomicInteger();

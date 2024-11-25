@@ -1,6 +1,7 @@
 package com.balugaq.sfworldedit.core.managers;
 
 import com.balugaq.sfworldedit.api.objects.CachedRequest;
+import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
 import com.balugaq.sfworldedit.core.commands.BlockInfoAdd;
 import com.balugaq.sfworldedit.core.commands.BlockInfoRemove;
@@ -13,7 +14,6 @@ import com.balugaq.sfworldedit.core.commands.Paste;
 import com.balugaq.sfworldedit.core.commands.Reload;
 import com.balugaq.sfworldedit.core.commands.SetPos1;
 import com.balugaq.sfworldedit.core.commands.SetPos2;
-import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.core.commands.Version;
 import com.balugaq.sfworldedit.utils.ParticleUtil;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
@@ -40,6 +40,7 @@ public class CommandManager implements IManager {
     private final Map<UUID, Pair<Location, Location>> selection = new HashMap<>();
     private final List<SubCommand> commands = new ArrayList<>();
     private ISFWorldEdit plugin;
+
     public CommandManager(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }

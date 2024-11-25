@@ -13,14 +13,17 @@ import java.util.List;
 public class Reload extends SubCommand {
     private static final String KEY = "reload";
     private final ISFWorldEdit plugin;
+
+    public Reload(@Nonnull ISFWorldEdit plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     @Nonnull
     public String getKey() {
         return KEY;
     }
-    public Reload(@Nonnull ISFWorldEdit plugin) {
-        this.plugin = plugin;
-    }
+
     @Override
     @ParametersAreNonnullByDefault
     public boolean onCommand(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {

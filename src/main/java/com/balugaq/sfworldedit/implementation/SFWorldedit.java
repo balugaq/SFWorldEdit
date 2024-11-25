@@ -47,11 +47,6 @@ public class SFWorldedit extends ISFWorldEdit {
     }
 
     @Nonnull
-    public CommandManager getCommandManager() {
-        return getInstance().commandManager;
-    }
-
-    @Nonnull
     public static ConfigManager getConfigManager() {
         return getInstance().configManager;
     }
@@ -65,6 +60,11 @@ public class SFWorldedit extends ISFWorldEdit {
     public static SFWorldedit getInstance() {
         Preconditions.checkArgument(instance != null, "SFWorldedit has not been enabled yet！");
         return SFWorldedit.instance;
+    }
+
+    @Nonnull
+    public CommandManager getCommandManager() {
+        return getInstance().commandManager;
     }
 
     @Override
@@ -104,7 +104,7 @@ public class SFWorldedit extends ISFWorldEdit {
         if (!commandManager.registerCommands()) {
             getLogger().warning("注册指令失败！");
         }
-        
+
         getLogger().info("成功启用此附属");
     }
 

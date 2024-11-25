@@ -17,6 +17,7 @@ import java.util.List;
 public class SetPos2 extends SubCommand {
     private static final String KEY = "pos2";
     private final ISFWorldEdit plugin;
+
     public SetPos2(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }

@@ -13,14 +13,17 @@ import java.util.List;
 public class Version extends SubCommand {
     private static final String KEY = "version";
     private final ISFWorldEdit plugin;
+
+    public Version(@Nonnull ISFWorldEdit plugin) {
+        this.plugin = plugin;
+    }
+
     @Override
     @Nonnull
     public String getKey() {
         return KEY;
     }
-    public Version(@Nonnull ISFWorldEdit plugin) {
-        this.plugin = plugin;
-    }
+
     @Override
     @ParametersAreNonnullByDefault
     public boolean onCommand(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {

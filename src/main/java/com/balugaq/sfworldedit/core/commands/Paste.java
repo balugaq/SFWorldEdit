@@ -36,9 +36,11 @@ public class Paste extends SubCommand {
     private static final String KEY = "paste";
     private static final List<String> FLAGS = List.of("override", "force");
     private final ISFWorldEdit plugin;
+
     public Paste(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }
+
     @Override
     public boolean onCommand(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
         if (!PermissionUtil.hasPermission(commandSender, this)) {

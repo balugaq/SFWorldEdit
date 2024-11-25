@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class BlockMenuSlotSet extends SubCommand {
     private static final String KEY = "blockmenuslotset";
     private final ISFWorldEdit plugin;
+
     public BlockMenuSlotSet(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }

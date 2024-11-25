@@ -35,6 +35,7 @@ public class Clone extends SubCommand {
     private static final String KEY = "clone";
     private final List<String> FLAGS = List.of("override");
     private final ISFWorldEdit plugin;
+
     public Clone(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }

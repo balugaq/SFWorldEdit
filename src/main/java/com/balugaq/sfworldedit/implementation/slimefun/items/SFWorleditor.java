@@ -2,7 +2,6 @@ package com.balugaq.sfworldedit.implementation.slimefun.items;
 
 import com.balugaq.sfworldedit.implementation.SFWorldedit;
 import com.balugaq.sfworldedit.utils.WorldUtils;
-import io.github.thebusybiscuit.slimefun4.api.events.PlayerRightClickEvent;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
@@ -12,10 +11,8 @@ import io.github.thebusybiscuit.slimefun4.core.handlers.ToolUseHandler;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
 import java.util.Optional;
 
 public class SFWorleditor extends SlimefunItem {

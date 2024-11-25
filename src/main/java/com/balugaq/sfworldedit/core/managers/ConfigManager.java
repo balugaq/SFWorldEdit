@@ -65,6 +65,7 @@ public class ConfigManager implements IManager {
     public boolean isDebug() {
         return plugin.getConfig().getBoolean("debug");
     }
+
     public int getModificationBlockLimit() {
         return plugin.getConfig().getInt("worldedit.modification-block-limit");
     }

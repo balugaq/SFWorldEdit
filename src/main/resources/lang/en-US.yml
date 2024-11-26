@@ -1,1 +1,134 @@
-# todo: translate the file
+messages:
+  startup:
+    incompatible: "Incompatible environment! The plugin has been disabled!"
+    trying-update: "Attempting to update automatically..."
+    loading-items: "Loading items..."
+    registering-commands: "Registering commands..."
+    register-commands-failed: "Failed to register commands!"
+    done: "Successfully enabled this addon"
+    unsupported-guizhanlib-version: "Unable to compatible with GuizhanLib, automatic update failed!"
+    auto-update-failed: "Automatic update failed!"
+    null-minecraft-version: "Unable to get Minecraft version!"
+    unknown-minecraft-version: "Unable to recognize Minecraft version! Use this plugin with caution!"
+    old-java-version: "Java version is too low, please use Java {0} or higher!"
+  shutdown:
+    goodbye: "Successfully disabled this addon"
+  command:
+    help:
+      content:
+        - "&a======= SFWorldedit Command List =======&r"
+        - "&b//shelp (subcommand) &7- &eDisplay help information"
+        - "&b//sreload &7- &eReload configuration file"
+        - "&b//sversion &7- &eDisplay plugin version"
+        - "&b//spos1 &7- &eSet the first position"
+        - "&b//spos2 &7- &eSet the second position"
+        - "&b//sblockinfoadd <key> <value> &7- &eAdd Slimefun block information to the selected area's Slimefun block"
+        - "&b//sblockinforemove <key> &7- &eRemove Slimefun block information from the selected area's Slimefun block"
+        - "&b//sblockmenuslotset <slot> &7- &eSet the block menu slot of the selected area's Slimefun block to the item in your hand"
+        - "&b//spaste <sfid> [-override|-o] [-force|-f] &7- &ePaste the specified Slimefun block into the selected area"
+        - "&b//sclone [-override|-o] &7- &eClone the selected area to the position you are standing"
+        - "&b//sclear [-callhandler|-c] [-skipvanilla|-s] &7- &eClear blocks in the selected area"
+        - "&b//sclearpos &7- &eClear the position you have marked"
+        - ""
+        - "&b======================"
+        - "&bAuthor(s):&ebalugaq"
+        - "&bCode Written By:&ebalugaq"
+        - "&bArtwork By:&ebalugaq"
+        - "&bTranslated By:&ebalugaq"
+        - ""
+        - "&bQQ Group Chat: &e855656308"
+        - "&bGitHub Repository: &ehttps://github.com/balugaq/SFWorldedit"
+        - "&bBug Reports: &ehttps://github.com/balugaq/SFWorldedit/issues"
+      usage:
+        help:
+          - "&b//shelp [subcommand]"
+          - "&bsubcommand: &eThe name of the subcommand (leave blank to display all commands)"
+        reload:
+          - "&b//sreload"
+        version:
+          - "&b//sversion"
+        pos1:
+          - "&b//spos1 &7- &eSet the first position"
+        pos2:
+          - "&b//spos2 &7- &eSet the second position"
+        blockinfoadd:
+          - "&b//sblockinfoadd <key> <value> &7- &eAdd Slimefun block information to the selected area's Slimefun block"
+          - "&bkey: &eThe key for the block information"
+          - "&bvalue: &eThe value for the block information"
+        blockinforemove:
+          - "&b//sblockinforemove <key> &7- &eRemove Slimefun block information from the selected area's Slimefun block"
+          - "&bkey: &eThe key for the block information"
+        blockmenuslotset:
+          - "&b//sblockmenuslotset <slot> &7- &eSet the block menu slot of the selected area's Slimefun block to the item in your hand"
+          - "&bslot: &eThe slot number of the block menu (0 ~ 53)"
+        paste:
+          - "&b//spaste <sfid> [-override|-o] [-force|-f] &7- &ePaste the specified Slimefun block into the selected area"
+          - "&bsfid: &eThe specified Slimefun block ID"
+          - "&b[-override|-o]: &eOverride existing Slimefun blocks"
+          - "&b[-force|-f]: &eSkip the NotPlaceable check and force-paste the specified Slimefun block"
+        clone:
+          - "&b//sclone [-override|-o] &7- &eClone the selected area to the position you are standing"
+          - "&b[-override|-o]: &eOverride existing blocks"
+        clear:
+          - "&b//sclear [-callhandler|-c] [-skipvanilla|-s] &7- &eClear blocks in the selected area"
+          - "&b[-callhandler|-c]: &eCall the onClear method of the block handler"
+          - "&b[-skipvanilla|-s]: &eSkip vanilla blocks"
+        clearpos:
+          - "&b//sclearpos &7- &eClear the position you have marked"
+    setpos1:
+      success: "&aThe first position has been marked as {0}."
+      success-with-range: "&aThe first position has been marked as {0}, with a total of &e{1} &ablocks."
+    setpos2:
+      success: "&aThe second position has been marked as {0}."
+      success-with-range: "&aThe second position has been marked as {0}, with a total of &e{1} &ablocks."
+    blockinfoadd:
+      start: "&aAdding Slimefun block information to Slimefun blocks in the range of &e{0} &a~ &e{1}."
+      success: "&aAdded Slimefun block information to &e{0} &ablocks. Time taken: &e{1} &amilliseconds."
+    blockinforemove:
+      start: "&aRemoving Slimefun block information from Slimefun blocks in the range of &e{0} &a~ &e{1}."
+      success: "&aRemoved Slimefun block information from &e{0} &ablocks. Time taken: &e{1} &amilliseconds."
+    blockmenuslotset:
+      start: "&aSetting the block menu slot of Slimefun blocks in the range of &e{0} &a~ &e{1} &ato the item in your hand."
+      success: "&aSet the block menu slot for &e{0} &ablocks to the item in your hand. Time taken: &e{1} &amilliseconds."
+    paste:
+      start: "&aPasting the specified Slimefun block into the range of &e{0} &a~ &e{1}."
+      success: "&aPasted &e{0} &aspecified Slimefun blocks. Time taken: &e{1} &amilliseconds."
+    clone:
+      start: "&aCloning blocks in the range of &e{0} &a~ &e{1} &ato the position you are standing."
+      success: "&aCloned &e{0} &ablocks to the position you are standing. Time taken: &e{1} &amilliseconds."
+    clear:
+      start: "&aClearing blocks in the range of &e{0} &a~ &e{1}."
+      success: "&aCleared &e{0} &ablocks. Time taken: &e{1} &amilliseconds."
+    clearpos:
+      success: "&aCleared the position you have marked."
+    reload:
+      success: "&aConfiguration file has been reloaded."
+    version:
+      content: "&e{0} &bPlugin version: &e{1}"
+  error:
+    unknown-subcommand: "&cUnknown subcommand {0}."
+    unknown-location: "&cUnknown location."
+    unknown-world: "&cUnknown world."
+    no-permission: "&cYou do not have permission to perform this action."
+    player-only: "&cThis command can only be executed by a player."
+    console-only: "&cThis command can only be executed by the console."
+    no-selection: "&cYou have not selected a valid area."
+    world-mismatch: "&cThe area is in two different worlds."
+    missing-argument: "&cMissing argument {0}."
+    invalid-argument: "&cInvalid argument {0}."
+    invalid-slimefun-block-id: "&cInvalid Slimefun block ID."
+    block-only: "&cYou can only place blocks."
+    air-block: "&cYou cannot place air blocks."
+    not-placeable: "&cThis Slimefun block implements NotPlaceable interface and cannot be placed."
+    too-many-blocks: "&cToo many blocks in the specified area (maximum is {0}, specified is {1})"
+icons:
+  itemgroup_sfw_items:
+    name: "&aSFWorldedit Items"
+    lore:
+      - ""
+items:
+  SFW_WORLDEDITOR:
+    name: "&aSlimefun World Editor"
+    lore:
+      - "&aLeft click &7- &eSet the first position"
+      - "&aRight click &7- &eSet the second position"

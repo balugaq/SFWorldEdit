@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import javax.annotation.Nonnull;
 
+// confirm system, will implement in the future.
 @Getter
 public class CachedRequest {
     private final Runnable request;

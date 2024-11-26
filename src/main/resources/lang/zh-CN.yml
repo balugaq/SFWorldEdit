@@ -1,20 +1,34 @@
 messages:
+  startup:
+    incompatible: "环境不兼容！插件已被禁用！"
+    trying-update: "尝试自动更新..."
+    loading-items: "正在加载物品..."
+    registering-commands: "正在注册指令..."
+    register-commands-failed: "注册指令失败！"
+    done: "成功启用此附属"
+    unsupported-guizhanlib-version: "无法兼容 GuizhanLib, 自动更新失败！"
+    auto-update-failed: "自动更新失败！"
+    null-minecraft-version: "无法获取 Minecraft 版本！"
+    unknown-minecraft-version: "无法识别到 Minecraft 版本！请谨慎使用此插件！"
+    old-java-version: "Java 版本过低，请使用 Java {0} 或以上版本！"
+  shutdown:
+    goodbye: "成功禁用此附属"
   command:
     help:
       content:
         - "&a======= SFWorldedit 命令列表 =======&r"
-        - "&b//help (subcommand) &7- &e显示帮助信息"
-        - "&b//reload &7- &e重新加载配置文件"
-        - "&b//version &7- &e显示插件版本"
+        - "&b//shelp (subcommand) &7- &e显示帮助信息"
+        - "&b//sreload &7- &e重新加载配置文件"
+        - "&b//sversion &7- &e显示插件版本"
         - "&b//spos1 &7- &e设置第一个位置"
         - "&b//spos2 &7- &e设置第二个位置"
-        - "&b//blockinfoadd <key> <value> &7- &e对选中区域的 Slimefun 方块增加 Slimefun 方块信息"
-        - "&b//blockinforemove <key> &7- &e对选中区域的 Slimefun 方块移除 Slimefun 方块信息"
-        - "&b//blockmenuslotset <slot> &7- &e设置选中区域的 Slimefun 方块的方块菜单槽为你手中的物品"
-        - "&b//paste <sfid> [-override|-o] [-force|-f] &7- &e粘贴指定的 Slimefun 方块到选中区域"
-        - "&b//clone [-override|-o] &7- &e将选中区域克隆到你所处的位置"
-        - "&b//clear [-callhandler|-c] [-skipvanilla|-s] &7- &e清除选中区域的方块"
-        - "&b//clearpos &7- &e清除你标记的位置"
+        - "&b//sblockinfoadd <key> <value> &7- &e对选中区域的 Slimefun 方块增加 Slimefun 方块信息"
+        - "&b//sblockinforemove <key> &7- &e对选中区域的 Slimefun 方块移除 Slimefun 方块信息"
+        - "&b//sblockmenuslotset <slot> &7- &e设置选中区域的 Slimefun 方块的方块菜单槽为你手中的物品"
+        - "&b//spaste <sfid> [-override|-o] [-force|-f] &7- &e粘贴指定的 Slimefun 方块到选中区域"
+        - "&b//sclone [-override|-o] &7- &e将选中区域克隆到你所处的位置"
+        - "&b//sclear [-callhandler|-c] [-skipvanilla|-s] &7- &e清除选中区域的方块"
+        - "&b//sclearpos &7- &e清除你标记的位置"
         - ""
         - "&b======================"
         - "&b作者（们）：&ebalugaq"
@@ -27,40 +41,40 @@ messages:
         - "&bBug 反馈: &ehttps://github.com/balugaq/SFWorldedit/issues"
       usage:
         help:
-          - "&b//help [subcommand]"
+          - "&b//shelp [subcommand]"
           - "&bsubcommand: &e子命令名 ( 留空显示所有命令 )"
         reload:
-          - "&b//reload"
+          - "&b//sreload"
         version:
-          - "&b//version"
+          - "&b//sversion"
         pos1:
           - "&b//spos1 &7- &e设置第一个位置"
         pos2:
           - "&b//spos2 &7- &e设置第二个位置"
         blockinfoadd:
-          - "&b//blockinfoadd <key> <value> &7- &e对选中区域的 Slimefun 方块增加 Slimefun 方块信息"
+          - "&b//sblockinfoadd <key> <value> &7- &e对选中区域的 Slimefun 方块增加 Slimefun 方块信息"
           - "&bkey: &e方块信息的键"
           - "&bvalue: &e方块信息的值"
         blockinforemove:
-          - "&b//blockinforemove <key> &7- &e对选中区域的 Slimefun 方块移除 Slimefun 方块信息"
+          - "&b//sblockinforemove <key> &7- &e对选中区域的 Slimefun 方块移除 Slimefun 方块信息"
           - "&bkey: &e方块信息的键"
         blockmenuslotset:
-          - "&b//blockmenuslotset <slot> &7- &e设置选中区域的 Slimefun 方块的方块菜单槽为你手中的物品"
+          - "&b//sblockmenuslotset <slot> &7- &e设置选中区域的 Slimefun 方块的方块菜单槽为你手中的物品"
           - "&bslot: &e方块菜单槽的序号 ( 0 ~ 53 )"
         paste:
-          - "&b//paste <sfid> [-override|-o] [-force|-f] &7- &e粘贴指定的 Slimefun 方块到选中区域"
+          - "&b//spaste <sfid> [-override|-o] [-force|-f] &7- &e粘贴指定的 Slimefun 方块到选中区域"
           - "&bsfid: &e指定的 Slimefun 方块 ID"
           - "&b[-override|-o]: &e覆盖已有 Slimefun 方块"
           - "&b[-force|-f]: &e跳过 NotPlaceable 检查，强制粘贴指定的 Slimefun 方块"
         clone:
-          - "&b//clone [-override|-o] &7- &e将选中区域克隆到你所处的位置"
+          - "&b//sclone [-override|-o] &7- &e将选中区域克隆到你所处的位置"
           - "&b[-override|-o]: &e覆盖已有方块"
         clear:
-          - "&b//clear [-callhandler|-c] [-skipvanilla|-s] &7- &e清除选中区域的方块"
+          - "&b//sclear [-callhandler|-c] [-skipvanilla|-s] &7- &e清除选中区域的方块"
           - "&b[-callhandler|-c]: &e调用方块处理器的 onClear 方法"
           - "&b[-skipvanilla|-s]: &e跳过 vanilla 方块"
         clearpos:
-          - "&b//clearpos &7- &e清除你标记的位置"
+          - "&b//sclearpos &7- &e清除你标记的位置"
     setpos1:
       success: "&a已标记第一个位置 {0}."
       success-with-range: "&a已标记第一个位置 {0}，共 &e{1} &a个方块."
@@ -69,28 +83,28 @@ messages:
       success-with-range: "&a已标记第二个位置 {0}，共 &e{1} &a个方块."
     blockinfoadd:
       start: "&a正在对 &e{0} &a~ &e{1} &a范围内的 Slimefun 方块增加 Slimefun 方块信息。"
-      success: "&a对 &e{0} &a个方块增加 Slimefun 方块信息完成。 耗时 &e{1} &a秒。"
+      success: "&a对 &e{0} &a个方块增加 Slimefun 方块信息完成。 耗时 &e{1} &a毫秒。"
     blockinforemove:
       start: "&a正在对 &e{0} &a~ &e{1} &a范围内的 Slimefun 方块移除 Slimefun 方块信息。"
-      success: "&a对 &e{0} &a个方块移除 Slimefun 方块信息完成。 耗时 &e{1} 秒。"
+      success: "&a对 &e{0} &a个方块移除 Slimefun 方块信息完成。 耗时 &e{1} 毫秒。"
     blockmenuslotset:
       start: "&a正在对 &e{0} &a~ &e{1} &a范围内的 Slimefun 方块的方块菜单槽设置为你手中的物品。"
-      success: "&a对 &e{0} &a个方块的方块菜单槽设置为你手中的物品完成。 耗时 &e{1} &a秒。"
+      success: "&a对 &e{0} &a个方块的方块菜单槽设置为你手中的物品完成。 耗时 &e{1} &a毫秒。"
     paste:
       start: "&a正在粘贴指定的 Slimefun 方块到 &e{0} &a~ &e{1} &a范围内"
-      success: "&a粘贴 &e{0} &a个指定的 Slimefun 方块完成。 耗时 &e{1} &a秒。"
+      success: "&a粘贴 &e{0} &a个指定的 Slimefun 方块完成。 耗时 &e{1} &a毫秒。"
     clone:
       start: "&a正在克隆 &e{0} &a~ &e{1} &a范围内的方块到你所处的位置。"
-      success: "&a克隆 &e{0} &a个方块到你所处的位置完成。 耗时 &e{1} &a秒。"
+      success: "&a克隆 &e{0} &a个方块到你所处的位置完成。 耗时 &e{1} &a毫秒。"
     clear:
       start: "&a正在清除 &e{0} &a~ &e{1} &a范围内的方块。"
-      success: "&a清除 &e{0} &a个方块完成。 耗时 &e{1} &a秒。"
+      success: "&a清除 &e{0} &a个方块完成。 耗时 &e{1} &a毫秒。"
     clearpos:
       success: "&a已清除你标记的位置。"
     reload:
       success: "&a配置文件已重新加载。"
     version:
-      success: "&e{0} &b插件版本: &e{1}"
+      content: "&e{0} &b插件版本: &e{1}"
   error:
     unknown-subcommand: "&c未知子指令 {0}。"
     unknown-location: "&c未知位置。"
@@ -106,6 +120,7 @@ messages:
     block-only: "&c你只能放置方块。"
     air-block: "&c你不能放置空气方块。"
     not-placeable: "&c该 Slimefun 方块实现了 NotPlaceable 接口，不能被放置。"
+    too-many-blocks: "&c指定区域内的方块太多（最大值为 {0}，指定值为 {1}）"
 icons:
   itemgroup_sfw_items:
     name: "&aSFWorldedit 物品"

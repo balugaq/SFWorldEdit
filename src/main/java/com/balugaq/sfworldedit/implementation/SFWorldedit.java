@@ -5,10 +5,12 @@ import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
 import com.balugaq.sfworldedit.core.managers.CommandManager;
 import com.balugaq.sfworldedit.core.managers.ConfigManager;
 import com.balugaq.sfworldedit.core.services.LocalizationService;
+import com.balugaq.sfworldedit.utils.Debug;
 import com.google.common.base.Preconditions;
 import io.github.thebusybiscuit.slimefun4.utils.NumberUtils;
 import lombok.Getter;
 import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
+import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -47,11 +49,6 @@ public class SFWorldedit extends ISFWorldEdit {
     }
 
     @Nonnull
-    public static ConfigManager getConfigManager() {
-        return getInstance().configManager;
-    }
-
-    @Nonnull
     public static MinecraftVersion getMinecraftVersion() {
         return getInstance().minecraftVersion;
     }
@@ -62,6 +59,13 @@ public class SFWorldedit extends ISFWorldEdit {
         return SFWorldedit.instance;
     }
 
+    @Override
+    @Nonnull
+    public ConfigManager getConfigManager() {
+        return getInstance().configManager;
+    }
+
+    @Override
     @Nonnull
     public CommandManager getCommandManager() {
         return getInstance().commandManager;
@@ -72,12 +76,12 @@ public class SFWorldedit extends ISFWorldEdit {
         Preconditions.checkArgument(instance == null, "SFWorldEdit already has been enabled！");
         instance = this;
 
-        getLogger().info("Loading Config Manager...");
+        Debug.info("Loading Config Manager...");
         saveDefaultConfig();
         this.configManager = new ConfigManager(this);
         this.configManager.onLoad();
 
-        getLogger().info("Loading Localization Service...");
+        Debug.info("Loading Localization Service...");
         this.localizationService = new LocalizationService(this);
         this.localizationService.addLanguage(this.configManager.getLanguage());
         this.localizationService.addLanguage(DEFAULT_LANGUAGE);
@@ -86,26 +90,26 @@ public class SFWorldedit extends ISFWorldEdit {
         boolean isCompatible = environmentCheck();
 
         if (!isCompatible) {
-            getLogger().warning("环境不兼容！插件已被禁用！");
-            onDisable();
+            Debug.warning(getString("messages.startup.incompatible"));
+            Bukkit.getServer().getPluginManager().disablePlugin(this);
             return;
         }
 
-        getLogger().info("尝试自动更新...");
+        Debug.info(getString("messages.startup.trying-update"));
         tryUpdate();
 
-        getLogger().info("正在加载物品");
+        Debug.info(getString("messages.startup.loading-items"));
         SFWItemsSetup.setup(this);
 
-        getLogger().info("正在注册指令");
+        Debug.info(getString("messages.startup.registering-commands"));
         this.commandManager = new CommandManager(this);
         this.commandManager.onLoad();
 
         if (!commandManager.registerCommands()) {
-            getLogger().warning("注册指令失败！");
+            Debug.warning(getString("messages.startup.register-commands-failed"));
         }
 
-        getLogger().info("成功启用此附属");
+        Debug.info(getString("messages.startup.done"));
     }
 
     @Override
@@ -115,6 +119,7 @@ public class SFWorldedit extends ISFWorldEdit {
         this.commandManager.onUnload();
         this.commandManager = null;
 
+        final String message = getString("messages.shutdown.goodbye");
         this.localizationService = null;
 
         this.minecraftVersion = null;
@@ -124,7 +129,7 @@ public class SFWorldedit extends ISFWorldEdit {
         this.configManager = null;
 
         instance = null;
-        getLogger().info("成功禁用此附属");
+        Debug.info(message);
     }
 
     public void tryUpdate() {
@@ -134,11 +139,11 @@ public class SFWorldedit extends ISFWorldEdit {
                     GuizhanUpdater.start(this, getFile(), username, repo, branch);
                 }
             } catch (UnsupportedClassVersionError ignored) {
-                getLogger().warning("自动更新失败！");
+                Debug.warning(getString("messages.startup.unsupported-guizhanlib-version"));
             }
         } catch (Exception e) {
-            getLogger().warning("自动更新失败！");
-            e.printStackTrace();
+            Debug.warning(getString("messages.startup.auto-update-failed"));
+            Debug.trace(e);
         }
     }
 
@@ -156,7 +161,7 @@ public class SFWorldedit extends ISFWorldEdit {
 
     public void debug(@Nonnull String message) {
         if (getConfigManager().isDebug()) {
-            getLogger().warning("[DEBUG] " + message);
+            Debug.warning("[DEBUG] " + message);
         }
     }
 
@@ -169,12 +174,12 @@ public class SFWorldedit extends ISFWorldEdit {
         this.minecraftVersion = MinecraftVersion.getCurrentVersion();
         this.javaVersion = NumberUtils.getJavaVersion();
         if (minecraftVersion == null) {
-            getLogger().warning("无法获取到 Minecraft 版本！");
+            Debug.warning(getString("messages.startup.null-minecraft-version"));
             return false;
         }
 
         if (minecraftVersion == MinecraftVersion.UNKNOWN) {
-            getLogger().warning("无法识别到 Minecraft 版本！请谨慎使用此插件！");
+            Debug.warning(getString("messages.startup.unknown-minecraft-version"));
         }
 
         if (!minecraftVersion.isAtLeast(RECOMMENDED_MC_VERSION)) {
@@ -182,13 +187,14 @@ public class SFWorldedit extends ISFWorldEdit {
         }
 
         if (javaVersion < RECOMMENDED_JAVA_VERSION) {
-            getLogger().warning("Java 版本过低，请使用 Java " + RECOMMENDED_JAVA_VERSION + " 或以上版本！");
+            Debug.warning(getString("messages.startup.old-java-version", RECOMMENDED_JAVA_VERSION));
             return false;
         }
 
         return true;
     }
 
+    @Nonnull
     @Override
     public LocalizationService getLocalizationService() {
         return getInstance().localizationService;

@@ -21,7 +21,7 @@ public class ReflectionUtil {
             declaredField.setAccessible(true);
             declaredField.set(object, value);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
+            Debug.trace(e);
             return false;
         }
         return true;
@@ -33,7 +33,7 @@ public class ReflectionUtil {
             declaredField.setAccessible(true);
             declaredField.set(null, value);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            e.printStackTrace();
+            Debug.trace(e);
             return false;
         }
         return true;
@@ -65,6 +65,7 @@ public class ReflectionUtil {
         return null;
     }
 
+    @SuppressWarnings("unchecked")
     @Nullable
     public static <T, V> T getProperty(@Nonnull Object o, @Nonnull Class<V> clazz, @Nonnull String fieldName) throws IllegalAccessException {
         Field field = getField(clazz, fieldName);

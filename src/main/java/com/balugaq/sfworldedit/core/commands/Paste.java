@@ -54,7 +54,7 @@ public class Paste extends SubCommand {
         }
 
         if (args.length < 1) {
-            plugin.send(commandSender, "help.command.paste");
+            plugin.send(player, "error.missing-argument", "sfid");
             return false;
         }
 
@@ -73,6 +73,13 @@ public class Paste extends SubCommand {
 
         if (!Objects.equals(pos1.getWorld().getUID(), pos2.getWorld().getUID())) {
             plugin.send(player, "error.world-mismatch");
+            return false;
+        }
+
+        final long range = WorldUtils.getRange(pos1, pos2);
+        final long max = plugin.getConfigManager().getModificationBlockLimit();
+        if (range > max) {
+            plugin.send(commandSender, "error.too-many-blocks", range, max);
             return false;
         }
 
@@ -159,7 +166,7 @@ public class Paste extends SubCommand {
     @Nonnull
     @ParametersAreNonnullByDefault
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
-        if (args.length == 0) {
+        if (args.length == 1) {
             return Slimefun.getRegistry().getAllSlimefunItems()
                     .stream()
                     .filter(item -> {

@@ -5,7 +5,6 @@ auto-update: true
 language: zh-CN
 
 worldedit:
-  # todo: implement
   modification-block-limit: 32768
 
 # Do not change this value unless you know what you are doing.

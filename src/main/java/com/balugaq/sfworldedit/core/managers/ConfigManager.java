@@ -1,6 +1,7 @@
 package com.balugaq.sfworldedit.core.managers;
 
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
+import com.balugaq.sfworldedit.utils.Debug;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,6 +16,8 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 
 public class ConfigManager implements IManager {
+    public static final long DEFAULT_MODIFICATION_BLOCK_LIMIT = 32768;
+    private long cachedModificationBlockLimit = -1;
     private ISFWorldEdit plugin;
 
     public ConfigManager(@Nonnull ISFWorldEdit plugin) {
@@ -41,7 +44,7 @@ public class ConfigManager implements IManager {
         try {
             existingConfig.save(existingFile);
         } catch (IOException e) {
-            e.printStackTrace();
+            Debug.trace(e);
         }
     }
 
@@ -66,8 +69,27 @@ public class ConfigManager implements IManager {
         return plugin.getConfig().getBoolean("debug");
     }
 
-    public int getModificationBlockLimit() {
-        return plugin.getConfig().getInt("worldedit.modification-block-limit");
+    public long getModificationBlockLimit() {
+        if (cachedModificationBlockLimit != -1) {
+            return cachedModificationBlockLimit;
+        }
+
+        String s = plugin.getConfig().getString("worldedit.modification-block-limit");
+        try {
+            long modificationBlockLimit = Long.parseLong(s);
+
+            if (modificationBlockLimit < 1 || modificationBlockLimit > Long.MAX_VALUE) {
+                modificationBlockLimit = DEFAULT_MODIFICATION_BLOCK_LIMIT;
+                Debug.severe("Invalid modification block limit: " + s + ", using default value: " + DEFAULT_MODIFICATION_BLOCK_LIMIT);
+            }
+
+            cachedModificationBlockLimit = modificationBlockLimit;
+        } catch (NumberFormatException e) {
+            cachedModificationBlockLimit = DEFAULT_MODIFICATION_BLOCK_LIMIT;
+            Debug.severe("Invalid modification block limit: " + s + ", using default value: " + DEFAULT_MODIFICATION_BLOCK_LIMIT);
+        }
+
+        return cachedModificationBlockLimit;
     }
 
     @Nullable

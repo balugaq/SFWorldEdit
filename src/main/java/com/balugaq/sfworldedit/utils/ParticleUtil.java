@@ -93,7 +93,7 @@ public class ParticleUtil {
                 plugin.getServer().getScheduler().runTaskLaterAsynchronously(plugin, () -> finalRunnableList.forEach(Runnable::run), tick);
             }
 
-            time += interval;
+            time += (int) interval;
         }
     }
 
@@ -126,7 +126,7 @@ public class ParticleUtil {
                     }
                 }, time / 50);
             }
-            time += interval;
+            time += (int) interval;
         }
     }
 

@@ -34,7 +34,7 @@ public class TextUtil {
     @Nonnull
     public static String colorString(@Nonnull String string0, @Nonnull List<Color> colorList) {
         StringBuilder stringBuilder = new StringBuilder();
-        if (string0.length() == 0) {
+        if (string0.isEmpty()) {
             string0 += " ";
         }
         if (string0.length() == 1) {
@@ -181,9 +181,9 @@ public class TextUtil {
 
     @Nonnull
     public static Color[] disperse(int size, @Nonnull List<Color> colorList) {
-        if (size == 1 && colorList.size() > 0) {
+        if (size == 1 && !colorList.isEmpty()) {
             return new Color[]{TextUtil.cloneColor(colorList.get(0))};
-        } else if (size == 0 || colorList.size() == 0) {
+        } else if (size == 0 || colorList.isEmpty()) {
             return new Color[0];
         }
         Color[] result = new Color[size--];

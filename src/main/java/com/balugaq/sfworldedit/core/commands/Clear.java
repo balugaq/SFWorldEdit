@@ -59,6 +59,13 @@ public class Clear extends SubCommand {
             return false;
         }
 
+        final long range = WorldUtils.getRange(pos1, pos2);
+        final long max = plugin.getConfigManager().getModificationBlockLimit();
+        if (range > max) {
+            plugin.send(commandSender, "error.too-many-blocks", range, max);
+            return false;
+        }
+
         plugin.send(player, "command.clear.start", WorldUtils.locationToString(pos1), WorldUtils.locationToString(pos2));
 
         final boolean callHandler = CommandUtil.hasFlag(args, "callhandler") || CommandUtil.hasFlag(args, "c");
@@ -87,7 +94,7 @@ public class Clear extends SubCommand {
             count.addAndGet(1);
         }));
 
-        plugin.send(player, "command.clear.success", count, System.currentTimeMillis() - currentMillSeconds);
+        plugin.send(player, "command.clear.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
         return true;
     }
 

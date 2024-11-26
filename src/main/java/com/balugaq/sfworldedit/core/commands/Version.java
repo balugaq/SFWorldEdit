@@ -2,6 +2,7 @@ package com.balugaq.sfworldedit.core.commands;
 
 import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
+import com.balugaq.sfworldedit.utils.PermissionUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 
@@ -27,6 +28,11 @@ public class Version extends SubCommand {
     @Override
     @ParametersAreNonnullByDefault
     public boolean onCommand(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
+        if (!PermissionUtil.hasPermission(commandSender, this)) {
+            plugin.send(commandSender, "error.no-permission");
+            return false;
+        }
+
         plugin.send(commandSender, "command.version.content", plugin.getJavaPlugin().getName(), plugin.getDescription().getVersion());
         return true;
     }

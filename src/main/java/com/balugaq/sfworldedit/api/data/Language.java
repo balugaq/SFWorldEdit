@@ -1,5 +1,6 @@
 package com.balugaq.sfworldedit.api.data;
 
+import com.balugaq.sfworldedit.utils.Debug;
 import com.google.common.base.Preconditions;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -24,10 +25,10 @@ public final class Language {
         this.currentFile = currentFile;
         this.currentConfig = YamlConfiguration.loadConfiguration(currentFile);
         this.currentConfig.setDefaults(defaultConfig);
-        Iterator var4 = defaultConfig.getKeys(true).iterator();
+        Iterator<String> iterator = defaultConfig.getKeys(true).iterator();
 
-        while (var4.hasNext()) {
-            String key = (String) var4.next();
+        while (iterator.hasNext()) {
+            String key = iterator.next();
             if (!this.currentConfig.contains(key)) {
                 this.currentConfig.set(key, defaultConfig.get(key));
             }
@@ -49,8 +50,8 @@ public final class Language {
     public void save() {
         try {
             this.currentConfig.save(this.currentFile);
-        } catch (IOException var2) {
-            var2.printStackTrace();
+        } catch (IOException e) {
+            Debug.trace(e);
         }
 
     }

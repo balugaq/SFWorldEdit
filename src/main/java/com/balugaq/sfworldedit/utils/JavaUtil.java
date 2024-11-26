@@ -118,8 +118,8 @@ public class JavaUtil {
      * Generate random int[] contains 0 1 2 ...... length-1
      * for example, while the input length = 3, the output may be [0, 1, 2] or [0, 2, 1] or [1, 0, 2] or [1, 2, 0] or [2, 0, 1] or [2, 1, 0]
      *
-     * @param length
-     * @return
+     * @param length the length of the int[]
+     * @return a random int[]
      */
     @Nonnull
     public static int[] generateRandomInts(int length) {
@@ -149,10 +149,10 @@ public class JavaUtil {
      * output:
      * list: [c, b, a, e, f, d]
      *
-     * @param list
-     * @param ints
-     * @param <T>
-     * @return
+     * @param list the input list
+     * @param ints the int[]
+     * @param <T>  the type of the list
+     * @return the shuffled list
      */
     @Nonnull
     public static <T> List<T> shuffleByInts(@Nonnull List<T> list, @Nonnull int[] ints) {

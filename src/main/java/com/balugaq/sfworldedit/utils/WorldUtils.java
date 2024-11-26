@@ -1,6 +1,7 @@
 package com.balugaq.sfworldedit.utils;
 
 import com.balugaq.sfworldedit.implementation.SFWorldedit;
+import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -39,6 +40,7 @@ public class WorldUtils {
         }
     }
 
+    @CanIgnoreReturnValue
     public static boolean copyBlockState(@Nonnull BlockState fromBlockState, @Nonnull Block toBlock) {
         if (!success) {
             return false;
@@ -94,12 +96,27 @@ public class WorldUtils {
         final int upY = Math.max(pos1.getBlockY(), pos2.getBlockY());
         final int downZ = Math.min(pos1.getBlockZ(), pos2.getBlockZ());
         final int upZ = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
-        for (int x = downX; x <= upX; x++) {
-            for (int y = downY; y <= upY; y++) {
-                for (int z = downZ; z <= upZ; z++) {
-                    consumer.accept(new Location(pos1.getWorld(), x, y, z));
+        Bukkit.getScheduler().runTask(SFWorldedit.getInstance(), () -> {
+            for (int x = downX; x <= upX; x++) {
+                for (int y = downY; y <= upY; y++) {
+                    for (int z = downZ; z <= upZ; z++) {
+                        consumer.accept(new Location(pos1.getWorld(), x, y, z));
+                    }
                 }
             }
+        });
+    }
+
+    public static long getRange(@Nonnull Location pos1, @Nonnull Location pos2) {
+        if (pos1 == null || pos2 == null) {
+            return 0;
         }
+        final int downX = Math.min(pos1.getBlockX(), pos2.getBlockX());
+        final int upX = Math.max(pos1.getBlockX(), pos2.getBlockX());
+        final int downY = Math.min(pos1.getBlockY(), pos2.getBlockY());
+        final int upY = Math.max(pos1.getBlockY(), pos2.getBlockY());
+        final int downZ = Math.min(pos1.getBlockZ(), pos2.getBlockZ());
+        final int upZ = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
+        return (long) (Math.abs(upX - downX) + 1) * (Math.abs(upY - downY) + 1) * (Math.abs(upZ - downZ) + 1);
     }
 }

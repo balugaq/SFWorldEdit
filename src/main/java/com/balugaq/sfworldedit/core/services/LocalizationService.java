@@ -1,6 +1,7 @@
 package com.balugaq.sfworldedit.core.services;
 
 import com.balugaq.sfworldedit.api.data.Language;
+import com.balugaq.sfworldedit.utils.Debug;
 import com.balugaq.sfworldedit.utils.TextUtil;
 import com.google.common.base.Preconditions;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
@@ -51,13 +52,13 @@ public class LocalizationService {
     private final File langFolder;
     private final List<String> languages;
     private final Map<String, Language> langMap;
+    private final String colorTagRegex = "<[a-zA-Z0-9_]+>";
+    private final Pattern pattern = Pattern.compile(this.colorTagRegex);
     @Getter
     private String idPrefix = "";
     private String itemGroupKey = "categories";
     private String itemsKey = "items";
     private String recipesKey = "recipes";
-    private final String colorTagRegex = "<[a-zA-Z0-9_]+>";
-    private final Pattern pattern = Pattern.compile(this.colorTagRegex);
 
     @ParametersAreNonnullByDefault
     public LocalizationService(@Nonnull JavaPlugin plugin) {
@@ -72,13 +73,19 @@ public class LocalizationService {
         Preconditions.checkArgument(folderName != null, "The folder name should not be null");
         this.plugin = plugin;
         if (!plugin.getDataFolder().exists()) {
-            plugin.getDataFolder().mkdir();
+            boolean success = plugin.getDataFolder().mkdir();
+            if (!success) {
+                Debug.warn("Failed to create data folder for plugin " + plugin.getName());
+            }
         }
 
         this.langFolderName = folderName;
         this.langFolder = new File(plugin.getDataFolder(), folderName);
         if (!this.langFolder.exists()) {
-            this.langFolder.mkdir();
+            boolean success = this.langFolder.mkdir();
+            if (!success) {
+                Debug.warn("Failed to create language folder for plugin " + plugin.getName());
+            }
         }
 
     }
@@ -155,6 +162,7 @@ public class LocalizationService {
         List<String> localization;
         do {
             if (!languages.hasNext()) {
+                plugin.getLogger().severe("No localization found for path: " + path);
                 return new ArrayList<>();
             }
 
@@ -285,14 +293,12 @@ public class LocalizationService {
         Preconditions.checkArgument(itemStack != null, MSG_ITEMSTACK_NULL);
         if (extraLore != null && extraLore.length != 0) {
             final ItemMeta meta = itemStack.getItemMeta();
-            final List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList();
+            final List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList<>();
             lore.addAll(color(Arrays.asList(extraLore)));
             meta.setLore(lore);
             itemStack.setItemMeta(meta);
-            return itemStack;
-        } else {
-            return itemStack;
         }
+        return itemStack;
     }
 
     @Nonnull

@@ -36,6 +36,7 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class CommandManager implements IManager {
+    // confirm system, will implement in the future.
     private final Queue<CachedRequest> cachedRequests = new LinkedList<>();
     private final Map<UUID, Pair<Location, Location>> selection = new HashMap<>();
     private final List<SubCommand> commands = new ArrayList<>();

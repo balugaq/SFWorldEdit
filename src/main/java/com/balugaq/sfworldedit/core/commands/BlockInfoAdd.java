@@ -56,6 +56,13 @@ public class BlockInfoAdd extends SubCommand {
             return false;
         }
 
+        final long range = WorldUtils.getRange(pos1, pos2);
+        final long max = plugin.getConfigManager().getModificationBlockLimit();
+        if (range > max) {
+            plugin.send(commandSender, "error.too-many-blocks", range, max);
+            return false;
+        }
+
         if (args.length == 0) {
             plugin.send(player, "error.missing-argument", "key");
             return false;
@@ -79,7 +86,7 @@ public class BlockInfoAdd extends SubCommand {
             }
         }));
 
-        plugin.send(player, "command.blockinfoadd.success", count, System.currentTimeMillis() - currentMillSeconds);
+        plugin.send(player, "command.blockinfoadd.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
         return true;
     }
 
@@ -88,6 +95,10 @@ public class BlockInfoAdd extends SubCommand {
     @ParametersAreNonnullByDefault
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
         if (!(commandSender instanceof Player player)) {
+            return new ArrayList<>();
+        }
+
+        if (args.length > 1) {
             return new ArrayList<>();
         }
 

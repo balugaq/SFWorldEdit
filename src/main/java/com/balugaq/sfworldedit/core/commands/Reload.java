@@ -28,6 +28,7 @@ public class Reload extends SubCommand {
     @ParametersAreNonnullByDefault
     public boolean onCommand(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
         plugin.reloadConfig();
+        plugin.send(commandSender, "command.reload.success");
         return true;
     }
 

@@ -43,8 +43,8 @@ public class BlockInfoRemove extends SubCommand {
             return false;
         }
 
-        Location pos1 = plugin.getCommandManager().getPos1(player.getUniqueId());
-        Location pos2 = plugin.getCommandManager().getPos2(player.getUniqueId());
+        final Location pos1 = plugin.getCommandManager().getPos1(player.getUniqueId());
+        final Location pos2 = plugin.getCommandManager().getPos2(player.getUniqueId());
 
         if (pos1 == null || pos2 == null) {
             plugin.send(commandSender, "error.no-selection");
@@ -85,17 +85,17 @@ public class BlockInfoRemove extends SubCommand {
             return new ArrayList<>();
         }
 
-        Block block = player.getTargetBlockExact(8, FluidCollisionMode.NEVER);
+        final Block block = player.getTargetBlockExact(8, FluidCollisionMode.NEVER);
         if (block == null) {
             return new ArrayList<>();
         }
 
-        SlimefunBlockData data = StorageCacheUtils.getBlock(block.getLocation());
+        final SlimefunBlockData data = StorageCacheUtils.getBlock(block.getLocation());
         if (data == null) {
             return new ArrayList<>();
         }
 
-        Set<String> keys = new HashSet<>(data.getAllData().keySet());
+        final Set<String> keys = new HashSet<>(data.getAllData().keySet());
         keys.add("energy-charge");
 
         return keys.stream().toList();

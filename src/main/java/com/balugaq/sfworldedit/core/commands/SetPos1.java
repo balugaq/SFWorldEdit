@@ -36,8 +36,8 @@ public class SetPos1 extends SubCommand {
         }
 
         plugin.getCommandManager().setPos1(player.getUniqueId(), player.getLocation().getBlock().getLocation());
-        Location pos1 = plugin.getCommandManager().getPos1(player.getUniqueId());
-        Location pos2 = plugin.getCommandManager().getPos2(player.getUniqueId());
+        final Location pos1 = plugin.getCommandManager().getPos1(player.getUniqueId());
+        final Location pos2 = plugin.getCommandManager().getPos2(player.getUniqueId());
         if (pos2 != null) {
             plugin.send(player, "command.setpos1.success-with-range", WorldUtils.locationToString(pos1), WorldUtils.locationRange(pos1, pos2));
         } else {

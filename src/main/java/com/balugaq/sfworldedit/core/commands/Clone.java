@@ -52,8 +52,8 @@ public class Clone extends SubCommand {
             return false;
         }
 
-        Location pos1 = plugin.getCommandManager().getPos1(player.getUniqueId());
-        Location pos2 = plugin.getCommandManager().getPos2(player.getUniqueId());
+        final Location pos1 = plugin.getCommandManager().getPos1(player.getUniqueId());
+        final Location pos2 = plugin.getCommandManager().getPos2(player.getUniqueId());
 
         if (pos1 == null || pos2 == null) {
             return false;
@@ -108,13 +108,13 @@ public class Clone extends SubCommand {
                         )
                 ));
 
-                SlimefunBlockData fromSlimefunBlockData = Slimefun.getDatabaseManager().getBlockDataController().getBlockData(fromLocation);
+                final SlimefunBlockData fromSlimefunBlockData = Slimefun.getDatabaseManager().getBlockDataController().getBlockData(fromLocation);
                 if (override) {
                     Slimefun.getDatabaseManager().getBlockDataController().removeBlock(toLocation);
                 }
 
                 boolean ticking = false;
-                ChunkPosition chunkPosition = new ChunkPosition(fromLocation);
+                final ChunkPosition chunkPosition = new ChunkPosition(fromLocation);
                 if (tickingBlocks.containsKey(chunkPosition)) {
                     if (tickingBlocks.get(chunkPosition).contains(fromLocation)) {
                         ticking = true;
@@ -127,14 +127,14 @@ public class Clone extends SubCommand {
 
                 // Slimefun Block
                 Slimefun.getDatabaseManager().getBlockDataController().createBlock(toLocation, slimefunItem.getId());
-                SlimefunBlockData toSlimefunBlockData = Slimefun.getDatabaseManager().getBlockDataController().getBlockData(toLocation);
+                final SlimefunBlockData toSlimefunBlockData = Slimefun.getDatabaseManager().getBlockDataController().getBlockData(toLocation);
 
                 // SlimefunBlockData
                 if (fromSlimefunBlockData == null || toSlimefunBlockData == null) {
                     return;
                 }
 
-                Map<String, String> data = fromSlimefunBlockData.getAllData();
+                final Map<String, String> data = fromSlimefunBlockData.getAllData();
                 for (String key : data.keySet()) {
                     toSlimefunBlockData.setData(key, data.get(key));
                 }
@@ -147,7 +147,7 @@ public class Clone extends SubCommand {
                     return;
                 }
 
-                ItemStack[] contents = fromMenu.getContents();
+                final ItemStack[] contents = fromMenu.getContents();
                 for (int i = 0; i < contents.length; i++) {
                     if (contents[i] != null) {
                         toMenu.getInventory().setItem(i, contents[i].clone());

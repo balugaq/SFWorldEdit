@@ -46,8 +46,8 @@ public class Clear extends SubCommand {
             return false;
         }
 
-        Location pos1 = plugin.getCommandManager().getPos1(player.getUniqueId());
-        Location pos2 = plugin.getCommandManager().getPos2(player.getUniqueId());
+        final Location pos1 = plugin.getCommandManager().getPos1(player.getUniqueId());
+        final Location pos2 = plugin.getCommandManager().getPos2(player.getUniqueId());
 
         if (pos1 == null || pos2 == null) {
             plugin.send(commandSender, "error.no-selection");

@@ -111,3 +111,9 @@ icons:
     name: "&aSFWorldedit 物品"
     lore:
       - ""
+items:
+  SFW_WORLDEDITOR:
+    name: "&aSlimefun 世界编辑器"
+    lore:
+      - "&a左键点击 &7- &e设置第一个位置"
+      - "&a右键点击 &7- &e设置第二个位置"

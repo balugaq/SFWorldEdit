@@ -56,8 +56,8 @@ public class LocalizationService {
     private String itemGroupKey = "categories";
     private String itemsKey = "items";
     private String recipesKey = "recipes";
-    private String colorTagRegex = "<[a-zA-Z0-9_]+>";
-    private Pattern pattern = Pattern.compile(this.colorTagRegex);
+    private final String colorTagRegex = "<[a-zA-Z0-9_]+>";
+    private final Pattern pattern = Pattern.compile(this.colorTagRegex);
 
     @ParametersAreNonnullByDefault
     public LocalizationService(@Nonnull JavaPlugin plugin) {
@@ -105,8 +105,8 @@ public class LocalizationService {
 
     public final void addLanguage(@Nonnull String langFilename) {
         Preconditions.checkArgument(langFilename != null, "The language file name should not be null");
-        File langFile = new File(this.langFolder, langFilename + ".yml");
-        String resourcePath = this.langFolderName + "/" + langFilename + ".yml";
+        final File langFile = new File(this.langFolder, langFilename + ".yml");
+        final String resourcePath = this.langFolderName + "/" + langFilename + ".yml";
         if (!langFile.exists()) {
             try {
                 this.plugin.saveResource(resourcePath, false);
@@ -117,20 +117,20 @@ public class LocalizationService {
         }
 
         this.languages.add(langFilename);
-        InputStreamReader defaultReader = new InputStreamReader(this.plugin.getResource(resourcePath), StandardCharsets.UTF_8);
-        FileConfiguration defaultConfig = YamlConfiguration.loadConfiguration(defaultReader);
+        final InputStreamReader defaultReader = new InputStreamReader(this.plugin.getResource(resourcePath), StandardCharsets.UTF_8);
+        final FileConfiguration defaultConfig = YamlConfiguration.loadConfiguration(defaultReader);
         this.langMap.put(langFilename, new Language(langFilename, langFile, defaultConfig));
     }
 
     @Nonnull
     public String getString0(@Nonnull String path) {
         Preconditions.checkArgument(path != null, "path cannot be null");
-        String cached = CACHE.get(path);
+        final String cached = CACHE.get(path);
         if (cached != null) {
             return cached;
         }
 
-        Iterator<String> languages = this.languages.iterator();
+        final Iterator<String> languages = this.languages.iterator();
 
         String localization;
         do {
@@ -139,7 +139,7 @@ public class LocalizationService {
                 return path;
             }
 
-            String lang = languages.next();
+            final String lang = languages.next();
             localization = this.langMap.get(lang).getLang().getString(path);
         } while (localization == null);
 
@@ -150,7 +150,7 @@ public class LocalizationService {
     @Nonnull
     public List<String> getStringList(@Nonnull String path) {
         Preconditions.checkArgument(path != null, "path cannot be null");
-        Iterator<String> languages = this.languages.iterator();
+        final Iterator<String> languages = this.languages.iterator();
 
         List<String> localization;
         do {
@@ -158,7 +158,7 @@ public class LocalizationService {
                 return new ArrayList<>();
             }
 
-            String lang = languages.next();
+            final String lang = languages.next();
             localization = this.langMap.get(lang).getLang().getStringList(path);
         } while (localization.isEmpty());
 
@@ -284,8 +284,8 @@ public class LocalizationService {
     private <T extends ItemStack> T appendLore(@Nonnull T itemStack, @Nullable String... extraLore) {
         Preconditions.checkArgument(itemStack != null, MSG_ITEMSTACK_NULL);
         if (extraLore != null && extraLore.length != 0) {
-            ItemMeta meta = itemStack.getItemMeta();
-            List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList();
+            final ItemMeta meta = itemStack.getItemMeta();
+            final List<String> lore = meta.hasLore() ? meta.getLore() : new ArrayList();
             lore.addAll(color(Arrays.asList(extraLore)));
             meta.setLore(lore);
             itemStack.setItemMeta(meta);
@@ -324,7 +324,7 @@ public class LocalizationService {
 
     @ParametersAreNonnullByDefault
     public void sendList(@Nonnull CommandSender sender, @Nonnull String messageKey) {
-        List<String> list = getStringList(messageKey);
+        final List<String> list = getStringList(messageKey);
         if (list == null || list.isEmpty()) {
             return;
         }

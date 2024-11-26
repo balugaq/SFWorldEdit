@@ -41,8 +41,8 @@ public class BlockMenuSlotSet extends SubCommand {
             return false;
         }
 
-        Location pos1 = plugin.getCommandManager().getPos1(player.getUniqueId());
-        Location pos2 = plugin.getCommandManager().getPos2(player.getUniqueId());
+        final Location pos1 = plugin.getCommandManager().getPos1(player.getUniqueId());
+        final Location pos2 = plugin.getCommandManager().getPos2(player.getUniqueId());
 
         if (pos1 == null || pos2 == null) {
             plugin.send(commandSender, "error.no-selection");
@@ -59,7 +59,7 @@ public class BlockMenuSlotSet extends SubCommand {
             return false;
         }
 
-        String s = CommandUtil.getArgFlag(args, "slot");
+        final String s = CommandUtil.getArgFlag(args, "slot");
         if (s == null) {
             plugin.send(player, "error.missing-argument", "slot");
             return false;
@@ -73,7 +73,7 @@ public class BlockMenuSlotSet extends SubCommand {
             return false;
         }
 
-        ItemStack hand = player.getInventory().getItemInMainHand();
+        final ItemStack hand = player.getInventory().getItemInMainHand();
 
         plugin.send(player, "command.blockmenuslotset.start", WorldUtils.locationToString(pos1), WorldUtils.locationToString(pos2));
 

@@ -32,7 +32,7 @@ public class Help extends SubCommand {
             return true;
         }
 
-        String subCommand = args[0];
+        final String subCommand = args[0];
         plugin.getCommandManager().iter(cmd -> {
             if (cmd.getKey().equals(subCommand)) {
                 plugin.sendList(commandSender, "command.help.usage." + cmd.getKey());
@@ -49,7 +49,7 @@ public class Help extends SubCommand {
     @ParametersAreNonnullByDefault
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
         if (args.length <= 1) {
-            List<String> result = new ArrayList<>();
+            final List<String> result = new ArrayList<>();
             plugin.getCommandManager().iter(cmd -> {
                 result.add(cmd.getKey());
             });

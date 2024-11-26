@@ -83,7 +83,14 @@ public class SFWorldedit extends ISFWorldEdit {
 
         Debug.info("Loading Localization Service...");
         this.localizationService = new LocalizationService(this);
-        this.localizationService.addLanguage(this.configManager.getLanguage());
+        Debug.info("Loading Language \"" + this.configManager.getLanguage() + "\"...");
+        String language = this.configManager.getLanguage();
+        if (language == null) {
+            Debug.warn("Language is not set!");
+        }
+        this.localizationService.addLanguage(language);
+
+        Debug.info("Loading Default Language \"" + DEFAULT_LANGUAGE + "\"...");
         this.localizationService.addLanguage(DEFAULT_LANGUAGE);
 
         // Checking environment compatibility
@@ -116,7 +123,9 @@ public class SFWorldedit extends ISFWorldEdit {
     public void onDisable() {
         Preconditions.checkArgument(instance != null, "SFWorldedit has not been enabled yet！");
 
-        this.commandManager.onUnload();
+        if (this.commandManager != null) {
+            this.commandManager.onUnload();
+        }
         this.commandManager = null;
 
         final String message = getString("messages.shutdown.goodbye");
@@ -125,11 +134,13 @@ public class SFWorldedit extends ISFWorldEdit {
         this.minecraftVersion = null;
         this.javaVersion = 0;
 
-        this.configManager.onUnload();
+        if (this.configManager != null) {
+            this.configManager.onUnload();
+        }
         this.configManager = null;
 
-        instance = null;
         Debug.info(message);
+        instance = null;
     }
 
     public void tryUpdate() {
@@ -192,6 +203,10 @@ public class SFWorldedit extends ISFWorldEdit {
         }
 
         return true;
+    }
+
+    public static String getDefaultLanguage() {
+        return DEFAULT_LANGUAGE;
     }
 
     @Nonnull

@@ -117,7 +117,7 @@ public class LocalizationService {
         if (!langFile.exists()) {
             try {
                 this.plugin.saveResource(resourcePath, false);
-            } catch (IllegalArgumentException var6) {
+            } catch (IllegalArgumentException ignored) {
                 this.plugin.getLogger().log(Level.SEVERE, "The default language file {0} does not exist in jar file!", resourcePath);
                 return;
             }
@@ -127,6 +127,17 @@ public class LocalizationService {
         final InputStreamReader defaultReader = new InputStreamReader(this.plugin.getResource(resourcePath), StandardCharsets.UTF_8);
         final FileConfiguration defaultConfig = YamlConfiguration.loadConfiguration(defaultReader);
         this.langMap.put(langFilename, new Language(langFilename, langFile, defaultConfig));
+    }
+
+    public final void removeLanguage(@Nonnull String langFilename) {
+        Preconditions.checkArgument(langFilename != null, "The language file name should not be null");
+
+        this.languages.remove(langFilename);
+        this.langMap.remove(langFilename);
+    }
+
+    public final List<String> getLanguages() {
+        return new ArrayList<>(this.languages);
     }
 
     @Nonnull

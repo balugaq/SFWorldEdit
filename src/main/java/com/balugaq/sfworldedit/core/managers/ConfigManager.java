@@ -18,7 +18,7 @@ import java.io.Reader;
 public class ConfigManager implements IManager {
     public static final long DEFAULT_MODIFICATION_BLOCK_LIMIT = 32768;
     private long cachedModificationBlockLimit = -1;
-    private ISFWorldEdit plugin;
+    private final ISFWorldEdit plugin;
 
     public ConfigManager(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
@@ -108,6 +108,6 @@ public class ConfigManager implements IManager {
 
     @Override
     public void onUnload() {
-        this.plugin = null;
+        this.cachedModificationBlockLimit = -1;
     }
 }

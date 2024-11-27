@@ -59,6 +59,10 @@ public class SFWorldedit extends ISFWorldEdit {
         return SFWorldedit.instance;
     }
 
+    public static String getDefaultLanguage() {
+        return DEFAULT_LANGUAGE;
+    }
+
     @Override
     @Nonnull
     public ConfigManager getConfigManager() {
@@ -203,10 +207,6 @@ public class SFWorldedit extends ISFWorldEdit {
         }
 
         return true;
-    }
-
-    public static String getDefaultLanguage() {
-        return DEFAULT_LANGUAGE;
     }
 
     @Nonnull

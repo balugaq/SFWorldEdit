@@ -2,7 +2,6 @@ package com.balugaq.sfworldedit.core.commands;
 
 import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
-import com.balugaq.sfworldedit.implementation.SFWorldedit;
 import com.balugaq.sfworldedit.utils.PermissionUtil;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import org.bukkit.Bukkit;

@@ -25,11 +25,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Clear extends SubCommand {
+public class ClearCommand extends SubCommand {
     private static final String KEY = "clear";
     private final ISFWorldEdit plugin;
 
-    public Clear(@Nonnull ISFWorldEdit plugin) {
+    public ClearCommand(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }
 
@@ -90,8 +90,8 @@ public class Clear extends SubCommand {
             Slimefun.getDatabaseManager().getBlockDataController().removeBlock(location);
             if (!skipVanilla) {
                 targetBlock.setType(Material.AIR);
+                count.addAndGet(1);
             }
-            count.addAndGet(1);
         }));
 
         plugin.send(player, "command.clear.success", count.get(), System.currentTimeMillis() - currentMillSeconds);

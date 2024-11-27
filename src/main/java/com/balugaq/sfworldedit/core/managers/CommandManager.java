@@ -3,18 +3,18 @@ package com.balugaq.sfworldedit.core.managers;
 import com.balugaq.sfworldedit.api.objects.CachedRequest;
 import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
-import com.balugaq.sfworldedit.core.commands.BlockInfoAdd;
-import com.balugaq.sfworldedit.core.commands.BlockInfoRemove;
-import com.balugaq.sfworldedit.core.commands.BlockMenuSlotSet;
-import com.balugaq.sfworldedit.core.commands.Clear;
-import com.balugaq.sfworldedit.core.commands.ClearPos;
-import com.balugaq.sfworldedit.core.commands.Clone;
-import com.balugaq.sfworldedit.core.commands.Help;
-import com.balugaq.sfworldedit.core.commands.Paste;
-import com.balugaq.sfworldedit.core.commands.Reload;
-import com.balugaq.sfworldedit.core.commands.SetPos1;
-import com.balugaq.sfworldedit.core.commands.SetPos2;
-import com.balugaq.sfworldedit.core.commands.Version;
+import com.balugaq.sfworldedit.core.commands.BlockInfoAddCommand;
+import com.balugaq.sfworldedit.core.commands.BlockInfoRemoveCommand;
+import com.balugaq.sfworldedit.core.commands.BlockMenuSlotSetCommand;
+import com.balugaq.sfworldedit.core.commands.ClearCommand;
+import com.balugaq.sfworldedit.core.commands.ClearPosCommand;
+import com.balugaq.sfworldedit.core.commands.CloneCommand;
+import com.balugaq.sfworldedit.core.commands.HelpCommand;
+import com.balugaq.sfworldedit.core.commands.PasteCommand;
+import com.balugaq.sfworldedit.core.commands.ReloadCommand;
+import com.balugaq.sfworldedit.core.commands.SetPos1Command;
+import com.balugaq.sfworldedit.core.commands.SetPos2Command;
+import com.balugaq.sfworldedit.core.commands.VersionCommand;
 import com.balugaq.sfworldedit.utils.ParticleUtil;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.Pair;
@@ -123,18 +123,18 @@ public class CommandManager implements IManager {
 
     @Override
     public void onLoad() {
-        commands.add(new Help(plugin));
-        commands.add(new SetPos1(plugin));
-        commands.add(new SetPos2(plugin));
-        commands.add(new ClearPos(plugin));
-        commands.add(new Clone(plugin));
-        commands.add(new Paste(plugin));
-        commands.add(new Clear(plugin));
-        commands.add(new BlockMenuSlotSet(plugin));
-        commands.add(new BlockInfoAdd(plugin));
-        commands.add(new BlockInfoRemove(plugin));
-        commands.add(new Reload(plugin));
-        commands.add(new Version(plugin));
+        commands.add(new HelpCommand(plugin));
+        commands.add(new SetPos1Command(plugin));
+        commands.add(new SetPos2Command(plugin));
+        commands.add(new ClearPosCommand(plugin));
+        commands.add(new CloneCommand(plugin));
+        commands.add(new PasteCommand(plugin));
+        commands.add(new ClearCommand(plugin));
+        commands.add(new BlockMenuSlotSetCommand(plugin));
+        commands.add(new BlockInfoAddCommand(plugin));
+        commands.add(new BlockInfoRemoveCommand(plugin));
+        commands.add(new ReloadCommand(plugin));
+        commands.add(new VersionCommand(plugin));
         runParticleTask();
     }
 

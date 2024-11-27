@@ -31,12 +31,12 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Clone extends SubCommand {
+public class CloneCommand extends SubCommand {
     private static final String KEY = "clone";
     private final List<String> FLAGS = List.of("override");
     private final ISFWorldEdit plugin;
 
-    public Clone(@Nonnull ISFWorldEdit plugin) {
+    public CloneCommand(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }
 

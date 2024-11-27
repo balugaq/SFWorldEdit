@@ -5,25 +5,19 @@ import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
 import com.balugaq.sfworldedit.utils.PermissionUtil;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Help extends SubCommand {
-    private static final String KEY = "help";
+public class ClearPosCommand extends SubCommand {
+    private static final String KEY = "clearpos";
     private final ISFWorldEdit plugin;
 
-    public Help(@Nonnull ISFWorldEdit plugin) {
+    public ClearPosCommand(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
-    }
-
-    @Override
-    @Nonnull
-    public String getKey() {
-        return KEY;
     }
 
     @Override
@@ -34,24 +28,12 @@ public class Help extends SubCommand {
             return false;
         }
 
-        if (args.length == 0) {
-            plugin.sendList(commandSender, "messages.command.help.content");
-            return true;
+        if (!(commandSender instanceof Player player)) {
+            plugin.send(commandSender, "error.player-only");
+            return false;
         }
 
-        final String subCommand = args[0];
-        final AtomicBoolean found = new AtomicBoolean(false);
-        plugin.getCommandManager().iter(cmd -> {
-            if (cmd.getKey().equals(subCommand)) {
-                plugin.sendList(commandSender, "messages.command.help.usage." + cmd.getKey());
-                found.set(true);
-            }
-        });
-
-        if (!found.get()) {
-            plugin.send(commandSender, "error.unknown-subcommand", subCommand);
-        }
-
+        plugin.getCommandManager().clearSelection(player.getUniqueId());
         return true;
     }
 
@@ -59,11 +41,12 @@ public class Help extends SubCommand {
     @Nonnull
     @ParametersAreNonnullByDefault
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
-        if (args.length <= 1) {
-            final List<String> result = new ArrayList<>();
-            plugin.getCommandManager().iter(cmd -> result.add(cmd.getKey()));
-            return result;
-        }
         return new ArrayList<>();
+    }
+
+    @Override
+    @Nonnull
+    public String getKey() {
+        return KEY;
     }
 }

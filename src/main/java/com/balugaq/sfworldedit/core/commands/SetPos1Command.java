@@ -14,11 +14,11 @@ import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SetPos1 extends SubCommand {
+public class SetPos1Command extends SubCommand {
     private static final String KEY = "pos1";
     private final ISFWorldEdit plugin;
 
-    public SetPos1(@Nonnull ISFWorldEdit plugin) {
+    public SetPos1Command(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }
 

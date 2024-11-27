@@ -22,11 +22,11 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class BlockInfoRemove extends SubCommand {
-    private static final String KEY = "blockinforemove";
+public class BlockInfoAddCommand extends SubCommand {
+    private static final String KEY = "blockinfoadd";
     private final ISFWorldEdit plugin;
 
-    public BlockInfoRemove(@Nonnull ISFWorldEdit plugin) {
+    public BlockInfoAddCommand(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }
 
@@ -68,19 +68,25 @@ public class BlockInfoRemove extends SubCommand {
             return false;
         }
 
-        plugin.send(player, "command.blockinforemove.start", WorldUtils.locationToString(pos1), WorldUtils.locationToString(pos2));
+        if (args.length == 1) {
+            plugin.send(player, "error.missing-argument", "value");
+            return false;
+        }
+
+        plugin.send(player, "command.blockinfoadd.start", WorldUtils.locationToString(pos1), WorldUtils.locationToString(pos2));
 
         final String key = args[0];
+        final String value = args[1];
         final long currentMillSeconds = System.currentTimeMillis();
         final AtomicInteger count = new AtomicInteger();
         WorldUtils.doWorldEdit(pos1, pos2, (location -> {
             if (StorageCacheUtils.getBlock(location) != null) {
-                StorageCacheUtils.removeData(location, key);
+                StorageCacheUtils.setData(location, key, value);
                 count.addAndGet(1);
             }
         }));
 
-        plugin.send(player, "command.blockinforemove.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
+        plugin.send(player, "command.blockinfoadd.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
         return true;
     }
 

@@ -10,12 +10,13 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
-public class Version extends SubCommand {
-    private static final String KEY = "version";
+public class HelpCommand extends SubCommand {
+    private static final String KEY = "help";
     private final ISFWorldEdit plugin;
 
-    public Version(@Nonnull ISFWorldEdit plugin) {
+    public HelpCommand(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }
 
@@ -33,7 +34,24 @@ public class Version extends SubCommand {
             return false;
         }
 
-        plugin.send(commandSender, "command.version.content", plugin.getJavaPlugin().getName(), plugin.getDescription().getVersion());
+        if (args.length == 0) {
+            plugin.sendList(commandSender, "messages.command.help.content");
+            return true;
+        }
+
+        final String subCommand = args[0];
+        final AtomicBoolean found = new AtomicBoolean(false);
+        plugin.getCommandManager().iter(cmd -> {
+            if (cmd.getKey().equals(subCommand)) {
+                plugin.sendList(commandSender, "messages.command.help.usage." + cmd.getKey());
+                found.set(true);
+            }
+        });
+
+        if (!found.get()) {
+            plugin.send(commandSender, "error.unknown-subcommand", subCommand);
+        }
+
         return true;
     }
 
@@ -41,6 +59,11 @@ public class Version extends SubCommand {
     @Nonnull
     @ParametersAreNonnullByDefault
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
+        if (args.length <= 1) {
+            final List<String> result = new ArrayList<>();
+            plugin.getCommandManager().iter(cmd -> result.add(cmd.getKey()));
+            return result;
+        }
         return new ArrayList<>();
     }
 }

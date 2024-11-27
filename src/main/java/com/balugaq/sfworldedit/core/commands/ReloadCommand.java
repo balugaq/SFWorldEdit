@@ -11,15 +11,14 @@ import org.bukkit.command.CommandSender;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Reload extends SubCommand {
+public class ReloadCommand extends SubCommand {
     private static final String KEY = "reload";
     private final ISFWorldEdit plugin;
 
-    public Reload(@Nonnull ISFWorldEdit plugin) {
+    public ReloadCommand(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }
 
@@ -36,16 +35,11 @@ public class Reload extends SubCommand {
             plugin.send(commandSender, "error.no-permission");
             return false;
         }
-        Bukkit.getServer().getScheduler().runTask(plugin, () -> {
+        Bukkit.getServer().getScheduler().runTask(Slimefun.instance(), () -> {
             final String message = plugin.getString("messages.command.reload.success");
 
-            plugin.getConfigManager().onUnload();
-            plugin.getConfigManager().onLoad();
-            for (String lang : plugin.getLocalizationService().getLanguages()) {
-                plugin.getLocalizationService().removeLanguage(lang);
-            }
-            plugin.getLocalizationService().addLanguage(plugin.getConfigManager().getLanguage());
-            plugin.getLocalizationService().addLanguage(SFWorldedit.getDefaultLanguage());
+            Bukkit.getServer().getPluginManager().disablePlugin(plugin);
+            Bukkit.getServer().getPluginManager().enablePlugin(plugin);
             commandSender.sendMessage(message);
         });
         return true;

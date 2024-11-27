@@ -96,15 +96,14 @@ public class WorldUtils {
         final int upY = Math.max(pos1.getBlockY(), pos2.getBlockY());
         final int downZ = Math.min(pos1.getBlockZ(), pos2.getBlockZ());
         final int upZ = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
-        Bukkit.getScheduler().runTask(SFWorldedit.getInstance(), () -> {
-            for (int x = downX; x <= upX; x++) {
-                for (int y = downY; y <= upY; y++) {
-                    for (int z = downZ; z <= upZ; z++) {
-                        consumer.accept(new Location(pos1.getWorld(), x, y, z));
-                    }
+
+        for (int x = downX; x <= upX; x++) {
+            for (int y = downY; y <= upY; y++) {
+                for (int z = downZ; z <= upZ; z++) {
+                    consumer.accept(new Location(pos1.getWorld(), x, y, z));
                 }
             }
-        });
+        }
     }
 
     public static long getRange(@Nonnull Location pos1, @Nonnull Location pos2) {

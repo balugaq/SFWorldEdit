@@ -3,6 +3,7 @@ package com.balugaq.sfworldedit.core.commands;
 import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
 import com.balugaq.sfworldedit.utils.CommandUtil;
+import com.balugaq.sfworldedit.utils.Debug;
 import com.balugaq.sfworldedit.utils.PermissionUtil;
 import com.balugaq.sfworldedit.utils.WorldUtils;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
@@ -32,12 +33,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class Paste extends SubCommand {
+public class PasteCommand extends SubCommand {
     private static final String KEY = "paste";
     private static final List<String> FLAGS = List.of("override", "force");
     private final ISFWorldEdit plugin;
 
-    public Paste(@Nonnull ISFWorldEdit plugin) {
+    public PasteCommand(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }
 
@@ -53,14 +54,29 @@ public class Paste extends SubCommand {
             return false;
         }
 
-        if (args.length < 1) {
-            plugin.send(player, "error.missing-argument", "sfid");
-            return false;
-        }
-
-        final String sfid = args[0];
         final boolean override = CommandUtil.hasFlag(args, "override") || CommandUtil.hasFlag(args, "o");
         final boolean force = CommandUtil.hasFlag(args, "force") || CommandUtil.hasFlag(args, "f");
+        int length = args.length;
+        if (override) {
+            length--;
+        }
+        if (force) {
+            length--;
+        }
+
+        final String sfid;
+        if (length < 1) {
+            ItemStack hand = player.getInventory().getItemInMainHand();
+            SlimefunItem item = SlimefunItem.getByItem(hand);
+            if (item == null) {
+                plugin.send(player, "error.missing-argument", "sfid");
+                return false;
+            } else {
+                sfid = item.getId();
+            }
+        } else {
+            sfid = args[0];
+        }
         final SlimefunItem sfItem = SlimefunItem.getById(sfid);
 
         final Location pos1 = plugin.getCommandManager().getPos1(player.getUniqueId());
@@ -148,8 +164,8 @@ public class Paste extends SubCommand {
                     PlayerHead.setSkin(targetBlock, skin, false);
                 }
                 Slimefun.getDatabaseManager().getBlockDataController().createBlock(location, sfid);
+                count.addAndGet(1);
             }
-            count.addAndGet(1);
         }));
 
         plugin.send(player, "command.paste.success", count.get(), System.currentTimeMillis() - currentMillSeconds);

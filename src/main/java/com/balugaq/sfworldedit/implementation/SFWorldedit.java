@@ -6,6 +6,7 @@ import com.balugaq.sfworldedit.core.managers.CommandManager;
 import com.balugaq.sfworldedit.core.managers.ConfigManager;
 import com.balugaq.sfworldedit.core.services.LocalizationService;
 import com.balugaq.sfworldedit.utils.Debug;
+import com.balugaq.sfworldedit.utils.SlimefunItemUtil;
 import com.google.common.base.Preconditions;
 import io.github.thebusybiscuit.slimefun4.utils.NumberUtils;
 import lombok.Getter;
@@ -126,6 +127,8 @@ public class SFWorldedit extends ISFWorldEdit {
     @Override
     public void onDisable() {
         Preconditions.checkArgument(instance != null, "SFWorldedit has not been enabled yet！");
+
+        SlimefunItemUtil.unregisterAllItems();
 
         if (this.commandManager != null) {
             this.commandManager.onUnload();

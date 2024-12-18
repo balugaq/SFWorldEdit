@@ -8,6 +8,7 @@ messages:
     done: "成功启用此附属"
     unsupported-guizhanlib-version: "无法兼容 GuizhanLib, 自动更新失败！"
     auto-update-failed: "自动更新失败！"
+    metrics-failed: "Metrics 加载失败！"
     null-minecraft-version: "无法获取 Minecraft 版本！"
     unknown-minecraft-version: "无法识别到 Minecraft 版本！请谨慎使用此插件！"
     old-java-version: "Java 版本过低，请使用 Java {0} 或以上版本！"

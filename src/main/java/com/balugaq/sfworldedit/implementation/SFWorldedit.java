@@ -10,6 +10,8 @@ import com.balugaq.sfworldedit.utils.SlimefunItemUtil;
 import com.google.common.base.Preconditions;
 import io.github.thebusybiscuit.slimefun4.utils.NumberUtils;
 import lombok.Getter;
+import net.guizhanss.guizhanlibplugin.bstats.bukkit.Metrics;
+import net.guizhanss.guizhanlibplugin.bstats.charts.SimplePie;
 import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -150,17 +152,33 @@ public class SFWorldedit extends ISFWorldEdit {
         instance = null;
     }
 
+    private void loadMetrics() {
+        try {
+            Metrics metrics = new Metrics(this, 49574);
+            boolean enableAutoUpdate = getConfigManager().isAutoUpdate();
+            boolean enableDebug = getConfigManager().isDebug();
+            String autoUpdates = String.valueOf(enableAutoUpdate);
+            String debug = String.valueOf(enableDebug);
+            metrics.addCustomChart(new SimplePie("auto_updates", () -> autoUpdates));
+            metrics.addCustomChart(new SimplePie("debug", () -> debug));
+        } catch (NoClassDefFoundError | NullPointerException e) {
+            Debug.warning(getString("messages.startup.metrics-failed"));
+            e.printStackTrace();
+        } catch (UnsupportedOperationException e) {
+            Debug.warning(getString("messages.startup.unsupported-guizhanlib-version"));
+            Debug.trace(e);
+        }
+    }
     public void tryUpdate() {
         try {
-            try {
-                if (getConfigManager().isAutoUpdate() && getDescription().getVersion().startsWith("Build")) {
-                    GuizhanUpdater.start(this, getFile(), username, repo, branch);
-                }
-            } catch (UnsupportedClassVersionError ignored) {
-                Debug.warning(getString("messages.startup.unsupported-guizhanlib-version"));
+            if (configManager.isAutoUpdate() && getDescription().getVersion().startsWith("Build")) {
+                GuizhanUpdater.start(this, getFile(), username, repo, branch);
             }
-        } catch (Exception e) {
+        } catch (NoClassDefFoundError | NullPointerException e) {
             Debug.warning(getString("messages.startup.auto-update-failed"));
+            e.printStackTrace();
+        } catch (UnsupportedOperationException e) {
+            Debug.warning(getString("messages.startup.unsupported-guizhanlib-version"));
             Debug.trace(e);
         }
     }

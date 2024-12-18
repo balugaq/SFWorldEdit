@@ -11,6 +11,7 @@ messages:
     null-minecraft-version: "Unable to get Minecraft version!"
     unknown-minecraft-version: "Unable to recognize Minecraft version! Use this plugin with caution!"
     old-java-version: "Java version is too low, please use Java {0} or higher!"
+    metrics-failed: "Metrics start failed!"
   shutdown:
     goodbye: "Successfully disabled this addon"
   command:

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.balugaq.sfworldedit</groupId>
   <artifactId>SFWorldedit</artifactId>
-  <version>35</version>
+  <version>36</version>
   <build>
     <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
     <defaultGoal>clean package</defaultGoal>

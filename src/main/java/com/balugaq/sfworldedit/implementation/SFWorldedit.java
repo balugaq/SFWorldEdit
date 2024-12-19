@@ -152,23 +152,6 @@ public class SFWorldedit extends ISFWorldEdit {
         instance = null;
     }
 
-    private void loadMetrics() {
-        try {
-            Metrics metrics = new Metrics(this, 49574);
-            boolean enableAutoUpdate = getConfigManager().isAutoUpdate();
-            boolean enableDebug = getConfigManager().isDebug();
-            String autoUpdates = String.valueOf(enableAutoUpdate);
-            String debug = String.valueOf(enableDebug);
-            metrics.addCustomChart(new SimplePie("auto_updates", () -> autoUpdates));
-            metrics.addCustomChart(new SimplePie("debug", () -> debug));
-        } catch (NoClassDefFoundError | NullPointerException e) {
-            Debug.warning(getString("messages.startup.metrics-failed"));
-            e.printStackTrace();
-        } catch (UnsupportedOperationException e) {
-            Debug.warning(getString("messages.startup.unsupported-guizhanlib-version"));
-            Debug.trace(e);
-        }
-    }
     public void tryUpdate() {
         try {
             if (configManager.isAutoUpdate() && getDescription().getVersion().startsWith("Build")) {

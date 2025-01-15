@@ -2,31 +2,31 @@ package com.balugaq.sfworldedit.core.commands;
 
 import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
+import com.balugaq.sfworldedit.utils.ClipboardUtil;
 import com.balugaq.sfworldedit.utils.PermissionUtil;
 import com.balugaq.sfworldedit.utils.WorldUtils;
-import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
+import com.balugaq.sfworldedit.utils.YamlWriter;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
-import org.bukkit.FluidCollisionMode;
+import io.github.thebusybiscuit.slimefun4.utils.SlimefunUtils;
+import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class BlockInfoAddCommand extends SubCommand {
-    private static final String KEY = "blockinfoadd";
+public class BlockMenuSlotFindCommand extends SubCommand {
+    private static final String KEY = "blockmenuslotfind";
     private final ISFWorldEdit plugin;
 
-    public BlockInfoAddCommand(@Nonnull ISFWorldEdit plugin) {
+    public BlockMenuSlotFindCommand(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }
 
@@ -64,29 +64,54 @@ public class BlockInfoAddCommand extends SubCommand {
         }
 
         if (args.length == 0) {
-            plugin.send(player, "error.missing-argument", "key");
+            plugin.send(player, "error.missing-argument", "slot");
             return false;
         }
 
-        if (args.length == 1) {
-            plugin.send(player, "error.missing-argument", "value");
+        final String s = args[0];
+        if (s == null) {
+            plugin.send(player, "error.missing-argument", "slot");
             return false;
         }
 
-        plugin.send(player, "command.blockinfoadd.start", WorldUtils.locationToString(pos1), WorldUtils.locationToString(pos2));
+        int slot;
+        try {
+            slot = Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            plugin.send(player, "error.invalid-argument", s);
+            return false;
+        }
 
-        final String key = args[0];
-        final String value = args[1];
+        if (slot < 0 || slot > 53) {
+            plugin.send(player, "error.invalid-argument", s);
+            return false;
+        }
+
+        final ItemStack hand = player.getInventory().getItemInMainHand();
+
+        plugin.send(player, "command.blockmenuslotfind.start", WorldUtils.locationToString(pos1), WorldUtils.locationToString(pos2));
+
         final long currentMillSeconds = System.currentTimeMillis();
         final AtomicInteger count = new AtomicInteger();
+        final YamlWriter writer = new YamlWriter();
+        writer.setRoot("failed-locations");
+        final AtomicInteger index = new AtomicInteger(0);
         WorldUtils.doWorldEdit(player, pos1, pos2, (location -> {
-            if (StorageCacheUtils.getBlock(location) != null) {
-                StorageCacheUtils.setData(location, key, value);
-                count.addAndGet(1);
+            final BlockMenu menu = StorageCacheUtils.getMenu(location);
+            if (menu != null) {
+                if (slot < menu.getSize()) {
+                    if (SlimefunUtils.isItemSimilar(menu.getItemInSlot(slot), hand, true, true, true, true)) {
+                        count.addAndGet(1);
+                    } else {
+                        writer.set("" + index.getAndIncrement(), location);
+                    }
+                }
             }
         }), () -> {
-            plugin.send(player, "command.blockinfoadd.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
+            plugin.send(player, "command.blockmenuslotfind.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
+            ClipboardUtil.send(player, writer.toString());
         });
+
         return true;
     }
 
@@ -98,28 +123,11 @@ public class BlockInfoAddCommand extends SubCommand {
             return new ArrayList<>();
         }
 
-        if (!(commandSender instanceof Player player)) {
-            return new ArrayList<>();
+        if (args.length == 1) {
+            return List.of("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53");
         }
 
-        if (args.length > 1) {
-            return new ArrayList<>();
-        }
-
-        final Block block = player.getTargetBlockExact(8, FluidCollisionMode.NEVER);
-        if (block == null) {
-            return new ArrayList<>();
-        }
-
-        final SlimefunBlockData data = StorageCacheUtils.getBlock(block.getLocation());
-        if (data == null) {
-            return new ArrayList<>();
-        }
-
-        final Set<String> keys = new HashSet<>(data.getAllData().keySet());
-        keys.add("energy-charge");
-
-        return keys.stream().toList();
+        return new ArrayList<>();
     }
 
     @Override

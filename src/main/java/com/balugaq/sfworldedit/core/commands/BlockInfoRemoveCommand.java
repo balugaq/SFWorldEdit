@@ -73,14 +73,15 @@ public class BlockInfoRemoveCommand extends SubCommand {
         final String key = args[0];
         final long currentMillSeconds = System.currentTimeMillis();
         final AtomicInteger count = new AtomicInteger();
-        WorldUtils.doWorldEdit(pos1, pos2, (location -> {
+        WorldUtils.doWorldEdit(player, pos1, pos2, (location -> {
             if (StorageCacheUtils.getBlock(location) != null) {
                 StorageCacheUtils.removeData(location, key);
                 count.addAndGet(1);
             }
-        }));
+        }), () -> {
+            plugin.send(player, "command.blockinforemove.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
+        });
 
-        plugin.send(player, "command.blockinforemove.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
         return true;
     }
 
@@ -88,6 +89,10 @@ public class BlockInfoRemoveCommand extends SubCommand {
     @Nonnull
     @ParametersAreNonnullByDefault
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
+        if (!PermissionUtil.hasPermission(commandSender, this)) {
+            return new ArrayList<>();
+        }
+
         if (!(commandSender instanceof Player player)) {
             return new ArrayList<>();
         }

@@ -18,7 +18,6 @@ import java.io.Reader;
 public class ConfigManager implements IManager {
     public static final long DEFAULT_MODIFICATION_BLOCK_LIMIT = 32768;
     private final ISFWorldEdit plugin;
-    private long cachedModificationBlockLimit = -1;
 
     public ConfigManager(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
@@ -62,39 +61,31 @@ public class ConfigManager implements IManager {
     }
 
     public boolean isAutoUpdate() {
-        return plugin.getConfig().getBoolean("auto-update");
+        return plugin.getConfig().getBoolean("auto-update", false);
     }
 
     public boolean isDebug() {
-        return plugin.getConfig().getBoolean("debug");
+        return plugin.getConfig().getBoolean("debug", false);
     }
 
     public long getModificationBlockLimit() {
-        if (cachedModificationBlockLimit != -1) {
-            return cachedModificationBlockLimit;
-        }
+        return plugin.getConfig().getLong("worldedit.modification-block-limit", 32768);
+    }
 
-        String s = plugin.getConfig().getString("worldedit.modification-block-limit");
-        try {
-            long modificationBlockLimit = Long.parseLong(s);
+    public int getModificationChunkPerSecond() {
+        return plugin.getConfig().getInt("worldedit.modification-chunk-limit-per-second", 16);
+    }
 
-            if (modificationBlockLimit < 1 || modificationBlockLimit > Long.MAX_VALUE) {
-                modificationBlockLimit = DEFAULT_MODIFICATION_BLOCK_LIMIT;
-                Debug.severe("Invalid modification block limit: " + s + ", using default value: " + DEFAULT_MODIFICATION_BLOCK_LIMIT);
-            }
-
-            cachedModificationBlockLimit = modificationBlockLimit;
-        } catch (NumberFormatException e) {
-            cachedModificationBlockLimit = DEFAULT_MODIFICATION_BLOCK_LIMIT;
-            Debug.severe("Invalid modification block limit: " + s + ", using default value: " + DEFAULT_MODIFICATION_BLOCK_LIMIT);
-        }
-
-        return cachedModificationBlockLimit;
+    public int getMaxBackups() {
+        return plugin.getConfig().getInt("worldedit.max-backups", 20);
+    }
+    public boolean isAllowUndo() {
+        return plugin.getConfig().getBoolean("worldedit.allow-undo", true);
     }
 
     @Nullable
     public String getLanguage() {
-        return plugin.getConfig().getString("language");
+        return plugin.getConfig().getString("language", "zh-CN");
     }
 
     public void saveAll() {
@@ -108,6 +99,11 @@ public class ConfigManager implements IManager {
 
     @Override
     public void onUnload() {
-        this.cachedModificationBlockLimit = -1;
+
+    }
+
+    public void setConfig(String path, Object value) {
+        plugin.getConfig().set(path, value);
+        plugin.saveConfig();
     }
 }

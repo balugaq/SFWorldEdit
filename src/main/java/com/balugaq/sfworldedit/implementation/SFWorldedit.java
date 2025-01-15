@@ -10,8 +10,6 @@ import com.balugaq.sfworldedit.utils.SlimefunItemUtil;
 import com.google.common.base.Preconditions;
 import io.github.thebusybiscuit.slimefun4.utils.NumberUtils;
 import lombok.Getter;
-import net.guizhanss.guizhanlibplugin.bstats.bukkit.Metrics;
-import net.guizhanss.guizhanlibplugin.bstats.charts.SimplePie;
 import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;

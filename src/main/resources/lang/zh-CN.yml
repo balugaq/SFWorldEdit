@@ -27,8 +27,14 @@ messages:
         - "&b//sblockmenuslotset <slot> &7- &e设置选中区域的 Slimefun 方块的方块菜单槽为你手中的物品"
         - "&b//spaste <sfid> [-override|-o] [-force|-f] &7- &e粘贴指定的 Slimefun 方块到选中区域"
         - "&b//sclone [-override|-o] &7- &e将选中区域克隆到你所处的位置"
-        - "&b//sclear [-callhandler|-c] [-skipvanilla|-s] &7- &e清除选中区域的方块"
+        - "&b//sclear [-callhandler|-c] [-skipvanilla|-v] [-skipslimefun|-s] &7- &e清除选中区域的方块"
         - "&b//sclearpos &7- &e清除你标记的位置"
+        - "&b//sreload &7- &e重新加载配置文件"
+        - "&b//sversion &7- &e显示插件版本"
+        - "&b//srule <rule> <value> &7- &e修改配置文件"
+        - "&b//sundo &7- &e撤销上一次操作"
+        - "&b//sconfirm &7- &e确认操作"
+        - "&b//sblockmenuslotfind <slot> &7- &e查找符合条件的方块菜单"
         - ""
         - "&b======================"
         - "&b作者（们）：&ebalugaq"
@@ -43,10 +49,6 @@ messages:
         help:
           - "&b//shelp [subcommand]"
           - "&bsubcommand: &e子命令名 ( 留空显示所有命令 )"
-        reload:
-          - "&b//sreload"
-        version:
-          - "&b//sversion"
         pos1:
           - "&b//spos1 &7- &e设置第一个位置"
         pos2:
@@ -71,10 +73,26 @@ messages:
           - "&b[-override|-o]: &e覆盖已有方块"
         clear:
           - "&b//sclear [-callhandler|-c] [-skipvanilla|-s] &7- &e清除选中区域的方块"
-          - "&b[-callhandler|-c]: &e调用方块处理器的 onClear 方法"
-          - "&b[-skipvanilla|-s]: &e跳过 vanilla 方块"
+          - "&b[-callhandler|-c]: &e调用粘液方块的 onPlayerBreak 方法"
+          - "&b[-skipvanilla|-v]: &e跳过原版方块"
+          - "&b[-skipslimefun|-s]: &e跳过 Slimefun 方块"
         clearpos:
           - "&b//sclearpos &7- &e清除你标记的位置"
+        reload:
+          - "&b//sreload &7- &e重新加载配置文件"
+        version:
+          - "&b//sversion &7- &e显示插件版本"
+        rule:
+          - "&b//srule <rule> <value> &7- &e修改配置文件"
+          - "&brule: &e配置文件中的规则名"
+          - "&bvalue: &e新的规则值"
+        undo:
+          - "&b//sundo &7- &e撤销上一次操作"
+        confirm:
+          - "&b//sconfirm &7- &e确认操作"
+        blockmenuslotfind:
+          - "&b//sblockmenuslotfind <slot> &7- &e查找符合条件的方块菜单"
+          - "&bslot: &e方块菜单槽的序号 ( 0 ~ 53 )"
     setpos1:
       success: "&a已标记第一个位置 {0}."
       success-with-range: "&a已标记第一个位置 {0}，共 &e{1} &a个方块."
@@ -105,6 +123,15 @@ messages:
       success: "&a配置文件已重新加载。"
     version:
       content: "&e{0} &b插件版本: &e{1}"
+    rule:
+      success: "&a规则已修改。"
+    undo:
+      success: "&a已撤销操作。"
+    confirm:
+      success: "&a已确认操作。"
+    blockmenuslotfind:
+      start: "&a正在查找 &e{0} &a~ &e{1} &a范围内的符合条件的方块菜单。"
+      success: "&a已找到 &e{0} &a个符合条件的方块菜单。"
   error:
     unknown-subcommand: "&c未知子指令 {0}。"
     unknown-location: "&c未知位置。"
@@ -121,6 +148,10 @@ messages:
     air-block: "&c你不能放置空气方块。"
     not-placeable: "&c该 Slimefun 方块实现了 NotPlaceable 接口，不能被放置。"
     too-many-blocks: "&c指定区域内的方块太多（最大值为 {0}，指定值为 {1}）"
+    invalid-rule: "&c无效的规则。"
+    no-undo: "&c无法撤销更多步数。"
+    no-request: "&c没有待处理的请求。"
+    both-skipped: "&c不能同时跳过原版方块和 Slimefun 方块。"
 icons:
   itemgroup_sfw_items:
     name: "&aSFWorldedit 物品"

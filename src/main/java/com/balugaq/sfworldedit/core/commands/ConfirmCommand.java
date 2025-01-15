@@ -1,5 +1,6 @@
 package com.balugaq.sfworldedit.core.commands;
 
+import com.balugaq.sfworldedit.api.objects.CachedRequest;
 import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
 import com.balugaq.sfworldedit.utils.PermissionUtil;
@@ -10,13 +11,12 @@ import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
-public class HelpCommand extends SubCommand {
-    private static final String KEY = "help";
+public class ConfirmCommand extends SubCommand {
+    private static final String KEY = "confirm";
     private final ISFWorldEdit plugin;
 
-    public HelpCommand(@Nonnull ISFWorldEdit plugin) {
+    public ConfirmCommand(@Nonnull ISFWorldEdit plugin) {
         this.plugin = plugin;
     }
 
@@ -34,24 +34,14 @@ public class HelpCommand extends SubCommand {
             return false;
         }
 
-        if (args.length == 0) {
-            plugin.sendList(commandSender, "messages.command.help.content");
-            return true;
+        CachedRequest request = plugin.getCommandManager().pullCachedRequest(commandSender);
+        if (request == null) {
+            plugin.send(commandSender, "error.no-request");
+            return false;
         }
 
-        final String subCommand = args[0];
-        final AtomicBoolean found = new AtomicBoolean(false);
-        plugin.getCommandManager().iter(cmd -> {
-            if (cmd.getKey().equals(subCommand)) {
-                plugin.sendList(commandSender, "messages.command.help.usage." + cmd.getKey());
-                found.set(true);
-            }
-        });
-
-        if (!found.get()) {
-            plugin.send(commandSender, "error.unknown-subcommand", subCommand);
-        }
-
+        plugin.send(commandSender, "command.confirm.success");
+        request.execute();
         return true;
     }
 
@@ -59,15 +49,6 @@ public class HelpCommand extends SubCommand {
     @Nonnull
     @ParametersAreNonnullByDefault
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
-        if (!PermissionUtil.hasPermission(commandSender, this)) {
-            return new ArrayList<>();
-        }
-
-        if (args.length <= 1) {
-            final List<String> result = new ArrayList<>();
-            plugin.getCommandManager().iter(cmd -> result.add(cmd.getKey()));
-            return result;
-        }
         return new ArrayList<>();
     }
 }

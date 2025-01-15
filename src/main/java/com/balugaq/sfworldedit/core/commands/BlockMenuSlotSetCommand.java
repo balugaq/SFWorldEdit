@@ -90,7 +90,7 @@ public class BlockMenuSlotSetCommand extends SubCommand {
 
         final long currentMillSeconds = System.currentTimeMillis();
         final AtomicInteger count = new AtomicInteger();
-        WorldUtils.doWorldEdit(pos1, pos2, (location -> {
+        WorldUtils.doWorldEdit(player, pos1, pos2, (location -> {
             final BlockMenu menu = StorageCacheUtils.getMenu(location);
             if (menu != null) {
                 if (slot < menu.getSize()) {
@@ -98,9 +98,10 @@ public class BlockMenuSlotSetCommand extends SubCommand {
                     count.addAndGet(1);
                 }
             }
-        }));
+        }), () -> {
+            plugin.send(player, "command.blockmenuslotset.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
+        });
 
-        plugin.send(player, "command.blockmenuslotset.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
         return true;
     }
 
@@ -108,6 +109,10 @@ public class BlockMenuSlotSetCommand extends SubCommand {
     @Nonnull
     @ParametersAreNonnullByDefault
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
+        if (!PermissionUtil.hasPermission(commandSender, this)) {
+            return new ArrayList<>();
+        }
+
         if (args.length == 1) {
             return List.of("0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31", "32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48", "49", "50", "51", "52", "53");
         }

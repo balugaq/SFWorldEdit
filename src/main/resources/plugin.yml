@@ -40,12 +40,24 @@ commands:
   sfwblockmenuslotset:
     aliases:
       - /sblockmenuslotset
+  sfwblockmenuslotfind:
+    aliases:
+      - /sblockmenuslotfind
   sfwblockinfoadd:
     aliases:
       - /sblockinfoadd
   sfwblockinforemove:
     aliases:
       - /sblockinforemove
+  sfwrule:
+    aliases:
+      - /srule
+  sfwundo:
+    aliases:
+      - /sundo
+  sfwconfirm:
+    aliases:
+      - /sconfirm
 
 permissions:
   sfworldedit.admin:
@@ -84,9 +96,21 @@ permissions:
   sfworldedit.command.blockmenuslotset:
     description: Allows you to use the //sblockmenuslotset command
     default: op
+  sfworldedit.command.blockmenuslotfind:
+    description: Allows you to use the //sblockmenuslotfind command
+    default: op
   sfworldedit.command.blockinfoadd:
     description: Allows you to use the //sblockinfoadd command
     default: op
   sfworldedit.command.blockinforemove:
     description: Allows you to use the //sblockinforemove command
     default: op
+  sfworldedit.command.rule:
+    description: Allows you to use the //srule command
+    default: op
+  sfworldedit.command.undo:
+    description: Allows you to use the //sundo command
+    default: op
+  sfworldedit.command.confirm:
+    description: Allows you to confirm the //sconfirm command
+    default: true

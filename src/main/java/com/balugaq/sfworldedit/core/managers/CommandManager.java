@@ -1,19 +1,25 @@
 package com.balugaq.sfworldedit.core.managers;
 
+import com.balugaq.sfworldedit.api.data.Backup;
+import com.balugaq.sfworldedit.api.data.Content;
 import com.balugaq.sfworldedit.api.objects.CachedRequest;
 import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
 import com.balugaq.sfworldedit.core.commands.BlockInfoAddCommand;
 import com.balugaq.sfworldedit.core.commands.BlockInfoRemoveCommand;
+import com.balugaq.sfworldedit.core.commands.BlockMenuSlotFindCommand;
 import com.balugaq.sfworldedit.core.commands.BlockMenuSlotSetCommand;
 import com.balugaq.sfworldedit.core.commands.ClearCommand;
 import com.balugaq.sfworldedit.core.commands.ClearPosCommand;
 import com.balugaq.sfworldedit.core.commands.CloneCommand;
+import com.balugaq.sfworldedit.core.commands.ConfirmCommand;
 import com.balugaq.sfworldedit.core.commands.HelpCommand;
 import com.balugaq.sfworldedit.core.commands.PasteCommand;
 import com.balugaq.sfworldedit.core.commands.ReloadCommand;
+import com.balugaq.sfworldedit.core.commands.RuleCommand;
 import com.balugaq.sfworldedit.core.commands.SetPos1Command;
 import com.balugaq.sfworldedit.core.commands.SetPos2Command;
+import com.balugaq.sfworldedit.core.commands.UndoCommand;
 import com.balugaq.sfworldedit.core.commands.VersionCommand;
 import com.balugaq.sfworldedit.utils.ParticleUtil;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
@@ -21,6 +27,7 @@ import io.github.thebusybiscuit.slimefun4.libraries.dough.collections.Pair;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
@@ -36,8 +43,8 @@ import java.util.UUID;
 import java.util.function.Consumer;
 
 public class CommandManager implements IManager {
-    // confirm system, will implement in the future.
-    private final Queue<CachedRequest> cachedRequests = new LinkedList<>();
+    private final Map<UUID, Backup> actions = new HashMap<>();
+    private final Map<String, Queue<CachedRequest>> cachedRequests = new HashMap<>();
     private final Map<UUID, Pair<Location, Location>> selection = new HashMap<>();
     private final List<SubCommand> commands = new ArrayList<>();
     private ISFWorldEdit plugin;
@@ -87,17 +94,27 @@ public class CommandManager implements IManager {
         return selection.get(player).getSecondValue();
     }
 
-    public void addCachedRequest(@Nonnull CachedRequest request) {
-        cachedRequests.add(request);
+    public void addCachedRequest(@Nonnull CommandSender sender, @Nonnull CachedRequest request) {
+        String key = sender.getName();
+        if (!cachedRequests.containsKey(key)) {
+            cachedRequests.put(key, new LinkedList<>());
+        }
+
+        cachedRequests.get(key).add(request);
     }
 
     @Nullable
-    public CachedRequest pullCachedRequest() {
+    public CachedRequest pullCachedRequest(CommandSender sender) {
         if (cachedRequests.isEmpty()) {
             return null;
         }
 
-        return cachedRequests.poll();
+        String key = sender.getName();
+        if (!cachedRequests.containsKey(key)) {
+            return null;
+        }
+
+        return cachedRequests.get(key).poll();
     }
 
     public void runParticleTask() {
@@ -135,6 +152,12 @@ public class CommandManager implements IManager {
         commands.add(new BlockInfoRemoveCommand(plugin));
         commands.add(new ReloadCommand(plugin));
         commands.add(new VersionCommand(plugin));
+        if (plugin.getConfigManager().isAllowUndo()) {
+            commands.add(new UndoCommand(plugin));
+        }
+        commands.add(new RuleCommand(plugin));
+        commands.add(new ConfirmCommand(plugin));
+        commands.add(new BlockMenuSlotFindCommand(plugin));
         runParticleTask();
     }
 
@@ -147,5 +170,41 @@ public class CommandManager implements IManager {
         selection.clear();
         commands.clear();
         this.plugin = null;
+    }
+
+    public void initBackup(UUID playerUUID) {
+        if (actions.containsKey(playerUUID)) {
+            return;
+        }
+        actions.put(playerUUID, new Backup(playerUUID));
+    }
+
+    public void addBackup(@Nonnull UUID playerUUID, @Nonnull List<Content> backup) {
+        initBackup(playerUUID);
+        actions.get(playerUUID).addContent(backup);
+    }
+
+    @Nonnull
+    public List<Content> leftBackup(@Nonnull UUID playerUUID) {
+        initBackup(playerUUID);
+        return actions.get(playerUUID).getLeftContentAndDecreasePointer(new ArrayList<>());
+    }
+
+    @Nonnull
+    public List<Content> rightBackup(@Nonnull UUID playerUUID) {
+        initBackup(playerUUID);
+        return actions.get(playerUUID).getRightContentAndIncreasePointer(new ArrayList<>());
+    }
+
+    @Nonnull
+    public List<Content> getBackup(@Nonnull UUID playerUUID, int pointer) {
+        initBackup(playerUUID);
+        return actions.get(playerUUID).getContent(pointer);
+    }
+
+
+    public void clearBackup(@Nonnull UUID playerUUID) {
+        initBackup(playerUUID);
+        actions.get(playerUUID).clear();
     }
 }

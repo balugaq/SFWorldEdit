@@ -1,14 +1,12 @@
 package com.balugaq.sfworldedit.utils;
 
 import com.balugaq.sfworldedit.implementation.SFWorldedit;
-import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import io.github.thebusybiscuit.slimefun4.api.geo.GEOResource;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
 import io.github.thebusybiscuit.slimefun4.core.attributes.Radioactive;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import lombok.experimental.UtilityClass;
 
-import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 

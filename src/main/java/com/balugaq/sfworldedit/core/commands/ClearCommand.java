@@ -69,32 +69,42 @@ public class ClearCommand extends SubCommand {
         plugin.send(player, "command.clear.start", WorldUtils.locationToString(pos1), WorldUtils.locationToString(pos2));
 
         final boolean callHandler = CommandUtil.hasFlag(args, "callhandler") || CommandUtil.hasFlag(args, "c");
-        final boolean skipVanilla = CommandUtil.hasFlag(args, "skipvanilla") || CommandUtil.hasFlag(args, "s");
+        final boolean skipVanilla = CommandUtil.hasFlag(args, "skipvanilla") || CommandUtil.hasFlag(args, "v");
+        final boolean skipSlimefun = CommandUtil.hasFlag(args, "skipslimefun") || CommandUtil.hasFlag(args, "s");
+        if (skipVanilla && skipSlimefun) {
+            plugin.send(player, "error.both-skipped");
+            return false;
+        }
         final long currentMillSeconds = System.currentTimeMillis();
         final AtomicInteger count = new AtomicInteger();
-        WorldUtils.doWorldEdit(pos1, pos2, (location -> {
+        WorldUtils.doWorldEdit(player, pos1, pos2, (location -> {
             final Block targetBlock = pos1.getWorld().getBlockAt(location);
-            if (StorageCacheUtils.hasBlock(location)) {
-                if (callHandler) {
-                    SlimefunItem item = StorageCacheUtils.getSfItem(location);
-                    if (item != null) {
-                        item.callItemHandler(BlockBreakHandler.class, handler -> handler.onPlayerBreak(
-                                new BlockBreakEvent(targetBlock, player),
-                                new ItemStack(Material.AIR),
-                                new ArrayList<>()
-                        ));
+            if (!skipSlimefun) {
+                if (StorageCacheUtils.hasBlock(location)) {
+                    if (callHandler) {
+                        SlimefunItem item = StorageCacheUtils.getSfItem(location);
+                        if (item != null) {
+                            item.callItemHandler(BlockBreakHandler.class, handler -> handler.onPlayerBreak(
+                                    new BlockBreakEvent(targetBlock, player),
+                                    new ItemStack(Material.AIR),
+                                    targetBlock.getDrops().stream().toList()
+                            ));
+                        }
                     }
+                    targetBlock.setType(Material.AIR);
                 }
-                targetBlock.setType(Material.AIR);
+                Slimefun.getDatabaseManager().getBlockDataController().removeBlock(location);
             }
-            Slimefun.getDatabaseManager().getBlockDataController().removeBlock(location);
             if (!skipVanilla) {
-                targetBlock.setType(Material.AIR);
+                if (!StorageCacheUtils.hasBlock(location)) {
+                    targetBlock.setType(Material.AIR);
+                }
                 count.addAndGet(1);
             }
-        }));
+        }), () -> {
+            plugin.send(player, "command.clear.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
+        });
 
-        plugin.send(player, "command.clear.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
         return true;
     }
 
@@ -102,7 +112,24 @@ public class ClearCommand extends SubCommand {
     @Nonnull
     @ParametersAreNonnullByDefault
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
-        return new ArrayList<>();
+        if (!PermissionUtil.hasPermission(commandSender, this)) {
+            return new ArrayList<>();
+        }
+
+        final List<String> completions = new ArrayList<>();
+        if (!CommandUtil.hasFlag(args, "c") && !CommandUtil.hasFlag(args, "callhandler")) {
+            completions.add("-callhandler");
+            completions.add("-c");
+        }
+        if (!CommandUtil.hasFlag(args, "v") && !CommandUtil.hasFlag(args, "skipvanilla")) {
+            completions.add("-skipvanilla");
+            completions.add("-v");
+        }
+        if (!CommandUtil.hasFlag(args, "s") && !CommandUtil.hasFlag(args, "skipslimefun")) {
+            completions.add("-skipslimefun");
+            completions.add("-s");
+        }
+        return completions;
     }
 
     @Override

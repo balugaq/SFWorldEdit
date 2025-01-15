@@ -43,10 +43,6 @@ messages:
         help:
           - "&b//shelp [subcommand]"
           - "&bsubcommand: &eThe name of the subcommand (leave blank to display all commands)"
-        reload:
-          - "&b//sreload"
-        version:
-          - "&b//sversion"
         pos1:
           - "&b//spos1 &7- &eSet the first position"
         pos2:
@@ -70,11 +66,24 @@ messages:
           - "&b//sclone [-override|-o] &7- &eClone the selected area to the position you are standing"
           - "&b[-override|-o]: &eOverride existing blocks"
         clear:
-          - "&b//sclear [-callhandler|-c] [-skipvanilla|-s] &7- &eClear blocks in the selected area"
-          - "&b[-callhandler|-c]: &eCall the onClear method of the block handler"
-          - "&b[-skipvanilla|-s]: &eSkip vanilla blocks"
+          - "&b//sclear [-callhandler|-c] [-skipvanilla|-v] [-skipslimefun|-s] &7- &eClear blocks in the selected area"
+          - "&b[-callhandler|-c]: &eCall the onPlayerBreak method of the Slimefun block handler"
+          - "&b[-skipvanilla|-v]: &eSkip vanilla blocks"
+          - "&b[-skipslimefun|-s]: &eSkip Slimefun blocks"
         clearpos:
           - "&b//sclearpos &7- &eClear the position you have marked"
+        reload:
+          - "&b//sreload &7- &eReload configuration file"
+        version:
+          - "&b//sversion &7- &eDisplay plugin version"
+        rule:
+          - "&b//srule <rule> &7- &eUpdate the rule"
+        undo:
+          - "&b//sundo &7- &eUndo the last action"
+        confirm:
+          - "&b//sconfirm &7- &eConfirm the last action"
+        blockmenuslotfind:
+          - "&b//sblockmenuslotfind &7- &eFind Slimefun blocks with the block menu matches"
     setpos1:
       success: "&aThe first position has been marked as {0}."
       success-with-range: "&aThe first position has been marked as {0}, with a total of &e{1} &ablocks."
@@ -105,6 +114,15 @@ messages:
       success: "&aConfiguration file has been reloaded."
     version:
       content: "&e{0} &bPlugin version: &e{1}"
+    rule:
+      success: "&aUpdated the rule."
+    undo:
+      success: "&aUndo successful."
+    confirm:
+      success: "&aConfirmed."
+    blockmenuslotfind:
+      start: "&aFinding Slimefun blocks with the block menu matches in the range of &e{0} &a~ &e{1}."
+      success: "&aFound &e{0} &ablocks with the block menu matches."
   error:
     unknown-subcommand: "&cUnknown subcommand {0}."
     unknown-location: "&cUnknown location."
@@ -121,6 +139,10 @@ messages:
     air-block: "&cYou cannot place air blocks."
     not-placeable: "&cThis Slimefun block implements NotPlaceable interface and cannot be placed."
     too-many-blocks: "&cToo many blocks in the specified area (maximum is {0}, specified is {1})"
+    invalid-rule: "&cInvalid rule."
+    no-undo: "&cYou cannot undo any more."
+    no-request: "&cYou have not made any requests."
+    both-skipped: "&cYou cannot skip both vanilla and Slimefun blocks."
 icons:
   itemgroup_sfw_items:
     name: "&aSFWorldedit Items"

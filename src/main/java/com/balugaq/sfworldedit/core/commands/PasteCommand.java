@@ -141,7 +141,7 @@ public class PasteCommand extends SubCommand {
         skin = skin0;
         isHead = isHead0;
 
-        WorldUtils.doWorldEdit(pos1, pos2, (location -> {
+        WorldUtils.doWorldEdit(player, pos1, pos2, (location -> {
             final Block targetBlock = location.getBlock();
             sfItem.callItemHandler(BlockPlaceHandler.class, handler -> handler.onPlayerPlace(
                     new BlockPlaceEvent(
@@ -165,9 +165,10 @@ public class PasteCommand extends SubCommand {
                 Slimefun.getDatabaseManager().getBlockDataController().createBlock(location, sfid);
                 count.addAndGet(1);
             }
-        }));
+        }), () -> {
+            plugin.send(player, "command.paste.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
+        });
 
-        plugin.send(player, "command.paste.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
         return true;
     }
 
@@ -181,6 +182,10 @@ public class PasteCommand extends SubCommand {
     @Nonnull
     @ParametersAreNonnullByDefault
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
+        if (!PermissionUtil.hasPermission(commandSender, this)) {
+            return new ArrayList<>();
+        }
+
         if (args.length == 1) {
             return Slimefun.getRegistry().getAllSlimefunItems()
                     .stream()

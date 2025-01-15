@@ -85,7 +85,7 @@ public class CloneCommand extends SubCommand {
 
         final Map<ChunkPosition, Set<Location>> tickingBlocks = Slimefun.getTickerTask().getLocations();
 
-        WorldUtils.doWorldEdit(pos1, pos2, (fromLocation -> {
+        WorldUtils.doWorldEdit(player, pos1, pos2, (fromLocation -> {
             final Block fromBlock = fromLocation.getBlock();
             final Block toBlock = playerLocation.getWorld().getBlockAt(fromLocation.getBlockX() + dx, fromLocation.getBlockY() + dy, fromLocation.getBlockZ() + dz);
             final SlimefunItem slimefunItem = StorageCacheUtils.getSfItem(fromLocation);
@@ -165,9 +165,9 @@ public class CloneCommand extends SubCommand {
             if (!ticking) {
                 Slimefun.getTickerTask().disableTicker(toLocation);
             }
-        }));
-
-        plugin.send(player, "command.clone.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
+        }), () -> {
+            plugin.send(player, "command.clone.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
+        });
 
         return true;
     }
@@ -182,6 +182,10 @@ public class CloneCommand extends SubCommand {
     @Nonnull
     @ParametersAreNonnullByDefault
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
+        if (!PermissionUtil.hasPermission(commandSender, this)) {
+            return new ArrayList<>();
+        }
+
         if (args.length == 0) {
             List<String> left = new ArrayList<>();
             for (String flag : FLAGS) {

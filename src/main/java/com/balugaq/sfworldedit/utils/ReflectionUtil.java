@@ -12,35 +12,35 @@ import java.lang.reflect.Method;
 /**
  * @author Final_ROOT
  */
+@SuppressWarnings("unchecked")
 @UtilityClass
 public class ReflectionUtil {
 
-    public static boolean setValue(@Nonnull Object object, @Nonnull String field, @Nonnull Object value) {
+    public static boolean setValue(@Nonnull Object object, @Nonnull String field, Object value) {
         try {
             Field declaredField = object.getClass().getDeclaredField(field);
             declaredField.setAccessible(true);
             declaredField.set(object, value);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            Debug.trace(e);
+            e.printStackTrace();
             return false;
         }
         return true;
     }
 
-    public static <T> boolean setStaticValue(@Nonnull Class<T> clazz, @Nonnull String field, @Nonnull Object value) {
+    public static <T> boolean setStaticValue(@Nonnull Class<T> clazz, @Nonnull String field, Object value) {
         try {
             Field declaredField = clazz.getDeclaredField(field);
             declaredField.setAccessible(true);
             declaredField.set(null, value);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            Debug.trace(e);
+            e.printStackTrace();
             return false;
         }
         return true;
     }
 
-    @Nullable
-    public static Method getMethod(@Nonnull Class<?> clazz, @Nonnull String methodName) {
+    public static @Nullable Method getMethod(@Nonnull Class<?> clazz, String methodName) {
         while (clazz != Object.class) {
             for (Method method : clazz.getDeclaredMethods()) {
                 if (method.getName().equals(methodName)) {
@@ -52,8 +52,7 @@ public class ReflectionUtil {
         return null;
     }
 
-    @Nullable
-    public static Field getField(@Nonnull Class<?> clazz, @Nonnull String fieldName) {
+    public static @Nullable Field getField(@Nonnull Class<?> clazz, String fieldName) {
         while (clazz != Object.class) {
             for (Field field : clazz.getDeclaredFields()) {
                 if (field.getName().equals(fieldName)) {
@@ -65,9 +64,22 @@ public class ReflectionUtil {
         return null;
     }
 
-    @SuppressWarnings("unchecked")
-    @Nullable
-    public static <T, V> T getProperty(@Nonnull Object o, @Nonnull Class<V> clazz, @Nonnull String fieldName) throws IllegalAccessException {
+    public static @Nullable Object getValue(@Nonnull Object object, @Nonnull String fieldName) {
+        try {
+            Field field = getField(object.getClass(), fieldName);
+            if (field != null) {
+                field.setAccessible(true);
+                return field.get(object);
+            }
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+            return null;
+        }
+
+        return null;
+    }
+
+    public static <T, V> @Nullable T getProperty(Object o, @Nonnull Class<V> clazz, String fieldName) throws IllegalAccessException {
         Field field = getField(clazz, fieldName);
         if (field != null) {
             boolean b = field.canAccess(o);
@@ -80,8 +92,7 @@ public class ReflectionUtil {
         return null;
     }
 
-    @Nullable
-    public static Pair<Field, Class<?>> getDeclaredFieldsRecursively(@Nonnull Class<?> clazz, @Nonnull String fieldName) {
+    public static @Nullable Pair<Field, Class<?>> getDeclaredFieldsRecursively(@Nonnull Class<?> clazz, @Nonnull String fieldName) {
         try {
             Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);

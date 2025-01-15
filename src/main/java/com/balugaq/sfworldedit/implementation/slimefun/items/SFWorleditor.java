@@ -1,6 +1,7 @@
 package com.balugaq.sfworldedit.implementation.slimefun.items;
 
 import com.balugaq.sfworldedit.implementation.SFWorldedit;
+import com.balugaq.sfworldedit.utils.Constants;
 import com.balugaq.sfworldedit.utils.WorldUtils;
 import io.github.thebusybiscuit.slimefun4.api.items.ItemGroup;
 import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
@@ -31,6 +32,11 @@ public class SFWorleditor extends SlimefunItem {
                     }
 
                     final Player player = blockBreakEvent.getPlayer();
+                    if (!player.isOp() && !player.hasPermission(Constants.PERMISSION_ADMIN)) {
+                        SFWorldedit.getInstance().send(player, "error.no-permission");
+                        return;
+                    }
+
                     SFWorldedit.getInstance().getCommandManager().setPos1(player.getUniqueId(), block.getLocation());
                     final Location pos1 = SFWorldedit.getInstance().getCommandManager().getPos1(player.getUniqueId());
                     final Location pos2 = SFWorldedit.getInstance().getCommandManager().getPos2(player.getUniqueId());

@@ -102,20 +102,8 @@ public class CloneCommand extends SubCommand {
                 return;
             }
 
-            // Call Handler
-            slimefunItem.callItemHandler(BlockPlaceHandler.class, handler -> handler.onPlayerPlace(
-                    new BlockPlaceEvent(
-                            toBlock,
-                            toBlock.getState(),
-                            toBlock.getRelative(BlockFace.SOUTH),
-                            itemInHand,
-                            player,
-                            true,
-                            EquipmentSlot.HAND
-                    )
-            ));
-
-            final SlimefunBlockData fromSlimefunBlockData = Slimefun.getDatabaseManager().getBlockDataController().getBlockData(fromLocation);
+            final SlimefunBlockData fromSlimefunBlockData = StorageCacheUtils.getBlock(fromLocation);
+            StorageCacheUtils.requestLoad(fromSlimefunBlockData);
             if (override) {
                 Slimefun.getDatabaseManager().getBlockDataController().removeBlock(toLocation);
             }
@@ -140,6 +128,19 @@ public class CloneCommand extends SubCommand {
             if (fromSlimefunBlockData == null || toSlimefunBlockData == null) {
                 return;
             }
+
+            // Call Handler
+            slimefunItem.callItemHandler(BlockPlaceHandler.class, handler -> handler.onPlayerPlace(
+                    new BlockPlaceEvent(
+                            toBlock,
+                            toBlock.getState(),
+                            toBlock.getRelative(BlockFace.SOUTH),
+                            itemInHand,
+                            player,
+                            true,
+                            EquipmentSlot.HAND
+                    )
+            ));
 
             final Map<String, String> data = fromSlimefunBlockData.getAllData();
             for (String key : data.keySet()) {

@@ -107,6 +107,7 @@ public class BlockInfoRemoveCommand extends SubCommand {
         }
 
         final SlimefunBlockData data = StorageCacheUtils.getBlock(block.getLocation());
+        StorageCacheUtils.requestLoad(data);
         if (data == null) {
             return new ArrayList<>();
         }

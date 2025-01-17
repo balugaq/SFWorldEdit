@@ -213,6 +213,7 @@ public class WorldUtils {
         return new BukkitContent(location, location.getBlock().getState());
     }
 
+    @SuppressWarnings("unchecked")
     public static SFContent getSFContent(Location location) {
         SlimefunItem item = StorageCacheUtils.getSfItem(location);
         String id = null;
@@ -233,6 +234,7 @@ public class WorldUtils {
 
         Map<String, String> data = new HashMap<>();
         SlimefunBlockData blockData = StorageCacheUtils.getBlock(location);
+        StorageCacheUtils.requestLoad(blockData);
         if (blockData != null) {
             data = blockData.getAllData();
         }

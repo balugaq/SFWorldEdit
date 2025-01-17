@@ -80,7 +80,7 @@ public class ConfigManager implements IManager {
         return plugin.getConfig().getInt("worldedit.max-backups", 20);
     }
     public boolean isAllowUndo() {
-        return plugin.getConfig().getBoolean("worldedit.allow-undo", true);
+        return plugin.getConfig().getBoolean("worldedit.allow-undo", false);
     }
 
     @Nullable

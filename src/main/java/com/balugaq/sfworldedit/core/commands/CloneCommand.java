@@ -91,8 +91,12 @@ public class CloneCommand extends SubCommand {
             final SlimefunItem slimefunItem = StorageCacheUtils.getSfItem(fromLocation);
             final Location toLocation = toBlock.getLocation();
 
-            // Block Data
-            WorldUtils.copyBlockState(fromBlock.getState(), toBlock);
+            // If vanilla block, just copy block state.
+            // If Slimefun block, should create Slimefun Block first, then copy BlockState.
+            if (slimefunItem == null) {
+                // Block Data
+                WorldUtils.copyBlockState(fromBlock.getState(), toBlock);
+            }
 
             // Count means successful pasting block data. Not including Slimefun data.
             count.addAndGet(1);
@@ -122,6 +126,8 @@ public class CloneCommand extends SubCommand {
 
             // Slimefun Block
             Slimefun.getDatabaseManager().getBlockDataController().createBlock(toLocation, slimefunItem.getId());
+            // Copy BlockState after creating Slimefun block
+            WorldUtils.copyBlockState(fromBlock.getState(), toBlock);
             final SlimefunBlockData toSlimefunBlockData = Slimefun.getDatabaseManager().getBlockDataController().getBlockData(toLocation);
 
             // SlimefunBlockData

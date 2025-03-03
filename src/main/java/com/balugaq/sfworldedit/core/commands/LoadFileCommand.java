@@ -199,6 +199,21 @@ public class LoadFileCommand extends SubCommand {
             return false;
         }
 
+        Location originPos1 = new Location(
+                Bukkit.getWorld(c.getString("pos1.world")),
+                c.getInt("pos1.x"),
+                c.getInt("pos1.y"),
+                c.getInt("pos1.z")
+        );
+
+        Location originPos2 = new Location(
+                Bukkit.getWorld(c.getString("pos2.world")),
+                c.getInt("pos2.x"),
+                c.getInt("pos2.y"),
+                c.getInt("pos2.z")
+        );
+
+        List<Content> contents = new ArrayList<>();
         for (String key : content.getKeys(false)) {
             String[] locArr = key.split("_");
             int x = Integer.parseInt(locArr[0]);
@@ -208,11 +223,22 @@ public class LoadFileCommand extends SubCommand {
             ConfigurationSection part = content.getConfigurationSection(key);
             try {
                 Content contentObj = deserializeContent(part, location, hashBackup);
-                contentObj.action();
+                contents.add(contentObj);
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
                 plugin.send(player, "error.deserialization-error");
             }
+        }
+
+        final Location playerLocation = player.getLocation();
+        final int dx = playerLocation.getBlockX() - originPos1.getBlockX();
+        final int dy = playerLocation.getBlockY() - originPos1.getBlockY();
+        final int dz = playerLocation.getBlockZ() - originPos1.getBlockZ();
+        for (Content contentObj : contents) {
+            Location fromLocation = contentObj.getLocation().clone();
+            Location newLocation = playerLocation.getWorld().getBlockAt(fromLocation.getBlockX() + dx, fromLocation.getBlockY() + dy, fromLocation.getBlockZ() + dz).getLocation();
+            contentObj.setLocation(newLocation);
+            contentObj.action();
         }
 
 

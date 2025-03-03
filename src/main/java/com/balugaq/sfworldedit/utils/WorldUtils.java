@@ -309,7 +309,10 @@ public class WorldUtils {
         SlimefunBlockData blockData = StorageCacheUtils.getBlock(location);
         StorageCacheUtils.requestLoad(blockData);
         if (blockData != null) {
-            data = blockData.getAllData();
+            try {
+                data = blockData.getAllData();
+            } catch (IllegalStateException ignored) {
+            }
         }
 
         return new SFContent(location, location.getBlock().getState(), id, menu, data, true);

@@ -191,8 +191,14 @@ public class SaveFileCommand extends SubCommand {
             }
         }), () -> {
             config.set("hashBackup", hashBackup);
-            config.set("pos1", pos1);
-            config.set("pos2", pos2);
+            config.set("pos1.world", pos1.getWorld().getName());
+            config.set("pos1.x", pos1.getBlockX());
+            config.set("pos1.y", pos1.getBlockY());
+            config.set("pos1.z", pos1.getBlockZ());
+            config.set("pos2.world", pos2.getWorld().getName());
+            config.set("pos2.x", pos2.getBlockX());
+            config.set("pos2.y", pos2.getBlockY());
+            config.set("pos2.z", pos2.getBlockZ());
 
             try {
                 config.save(file);

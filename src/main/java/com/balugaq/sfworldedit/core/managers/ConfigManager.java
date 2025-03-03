@@ -17,6 +17,7 @@ import java.io.Reader;
 
 public class ConfigManager implements IManager {
     public static final long DEFAULT_MODIFICATION_BLOCK_LIMIT = 32768;
+    @Nonnull
     private final ISFWorldEdit plugin;
 
     public ConfigManager(@Nonnull ISFWorldEdit plugin) {
@@ -79,6 +80,7 @@ public class ConfigManager implements IManager {
     public int getMaxBackups() {
         return plugin.getConfig().getInt("worldedit.max-backups", 20);
     }
+
     public boolean isAllowUndo() {
         return plugin.getConfig().getBoolean("worldedit.allow-undo", false);
     }
@@ -102,7 +104,7 @@ public class ConfigManager implements IManager {
 
     }
 
-    public void setConfig(String path, Object value) {
+    public void setConfig(@Nonnull String path, Object value) {
         plugin.getConfig().set(path, value);
         plugin.saveConfig();
     }

@@ -3,6 +3,7 @@ package com.balugaq.sfworldedit.api.data;
 import com.balugaq.sfworldedit.implementation.SFWorldedit;
 import lombok.Getter;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import java.util.UUID;
 public class Backup {
     private static final int MAX_BACKUP_SIZE = SFWorldedit.getInstance().getConfigManager().getMaxBackups();
     private final UUID playerUUID;
+    @Nonnull
     private final List<List<Content>> backup;
     private int pointer = 0;
 
@@ -119,6 +121,7 @@ public class Backup {
     }
 
 
+    @Nonnull
     public List<List<Content>> getAllBackup() {
         return backup;
     }
@@ -130,6 +133,7 @@ public class Backup {
     public int increasePointer() {
         return pointer++;
     }
+
     public void refresh() {
         if (backup.size() > MAX_BACKUP_SIZE) {
             backup.remove(0);

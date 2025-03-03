@@ -3,6 +3,7 @@ package com.balugaq.sfworldedit.core.commands;
 import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
 import com.balugaq.sfworldedit.utils.CommandUtil;
+import com.balugaq.sfworldedit.utils.Debug;
 import com.balugaq.sfworldedit.utils.PermissionUtil;
 import com.balugaq.sfworldedit.utils.WorldUtils;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
@@ -23,9 +24,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
+import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -35,6 +40,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class PasteCommand extends SubCommand {
     private static final String KEY = "paste";
     private static final List<String> FLAGS = List.of("override", "force");
+    @Nonnull
     private final ISFWorldEdit plugin;
 
     public PasteCommand(@Nonnull ISFWorldEdit plugin) {

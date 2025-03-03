@@ -14,9 +14,11 @@ import com.balugaq.sfworldedit.core.commands.ClearPosCommand;
 import com.balugaq.sfworldedit.core.commands.CloneCommand;
 import com.balugaq.sfworldedit.core.commands.ConfirmCommand;
 import com.balugaq.sfworldedit.core.commands.HelpCommand;
+import com.balugaq.sfworldedit.core.commands.LoadFileCommand;
 import com.balugaq.sfworldedit.core.commands.PasteCommand;
 import com.balugaq.sfworldedit.core.commands.ReloadCommand;
 import com.balugaq.sfworldedit.core.commands.RuleCommand;
+import com.balugaq.sfworldedit.core.commands.SaveFileCommand;
 import com.balugaq.sfworldedit.core.commands.SetPos1Command;
 import com.balugaq.sfworldedit.core.commands.SetPos2Command;
 import com.balugaq.sfworldedit.core.commands.UndoCommand;
@@ -47,6 +49,7 @@ public class CommandManager implements IManager {
     private final Map<String, Queue<CachedRequest>> cachedRequests = new HashMap<>();
     private final Map<UUID, Pair<Location, Location>> selection = new HashMap<>();
     private final List<SubCommand> commands = new ArrayList<>();
+    @Nullable
     private ISFWorldEdit plugin;
 
     public CommandManager(@Nonnull ISFWorldEdit plugin) {
@@ -104,7 +107,7 @@ public class CommandManager implements IManager {
     }
 
     @Nullable
-    public CachedRequest pullCachedRequest(CommandSender sender) {
+    public CachedRequest pullCachedRequest(@Nonnull CommandSender sender) {
         if (cachedRequests.isEmpty()) {
             return null;
         }
@@ -158,6 +161,8 @@ public class CommandManager implements IManager {
         commands.add(new RuleCommand(plugin));
         commands.add(new ConfirmCommand(plugin));
         commands.add(new BlockMenuSlotFindCommand(plugin));
+        commands.add(new SaveFileCommand(plugin));
+        commands.add(new LoadFileCommand(plugin));
         runParticleTask();
     }
 

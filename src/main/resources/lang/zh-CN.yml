@@ -35,6 +35,8 @@ messages:
         - "&b//sundo &7- &e撤销上一次操作"
         - "&b//sconfirm &7- &e确认操作"
         - "&b//sblockmenuslotfind <slot> &7- &e查找符合条件的方块菜单"
+        - "&b//ssavefile &7- &e保存选中区域的方块到文件"
+        - "&b//sloadfile &7- &e加载文件中的方块到选中区域"
         - ""
         - "&b======================"
         - "&b作者（们）：&ebalugaq"
@@ -93,6 +95,10 @@ messages:
         blockmenuslotfind:
           - "&b//sblockmenuslotfind <slot> &7- &e查找符合条件的方块菜单"
           - "&bslot: &e方块菜单槽的序号 ( 0 ~ 53 )"
+        savefile:
+          - "&b//ssavefile &7- &e保存选中区域的方块到文件"
+        loadfile:
+          - "&b//sloadfile <file_name> &7- &e加载文件中的方块到选中区域"
     setpos1:
       success: "&a已标记第一个位置 {0}."
       success-with-range: "&a已标记第一个位置 {0}，共 &e{1} &a个方块."
@@ -132,6 +138,12 @@ messages:
     blockmenuslotfind:
       start: "&a正在查找 &e{0} &a~ &e{1} &a范围内的符合条件的方块菜单。"
       success: "&a已找到 &e{0} &a个符合条件的方块菜单。"
+    savefile:
+      start: "&a正在保存 &e{0} &a~ &e{1} &a范围内的方块..."
+      success: "&a保存文件成功。"
+    loadfile:
+      start: "&a正在加载文件..."
+      success: "&a加载文件成功。"
   error:
     unknown-subcommand: "&c未知子指令 {0}。"
     unknown-location: "&c未知位置。"
@@ -152,6 +164,9 @@ messages:
     no-undo: "&c无法撤销更多步数。"
     no-request: "&c没有待处理的请求。"
     both-skipped: "&c不能同时跳过原版方块和 Slimefun 方块。"
+    savefile-failed: "&c保存文件失败。"
+    loadfile-not-found: "&c找不到文件。"
+    loadfile-failed: "&c加载文件失败。"
 icons:
   itemgroup_sfw_items:
     name: "&aSFWorldedit 物品"

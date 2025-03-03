@@ -14,6 +14,7 @@ import java.util.List;
 
 public class ClearPosCommand extends SubCommand {
     private static final String KEY = "clearpos";
+    @Nonnull
     private final ISFWorldEdit plugin;
 
     public ClearPosCommand(@Nonnull ISFWorldEdit plugin) {

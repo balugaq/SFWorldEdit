@@ -47,17 +47,26 @@ public class LocalizationService {
     private static final String MSG_MATERIAL_NULL = "Material cannot be null";
     private static final String MSG_ITEMSTACK_NULL = "ItemStack cannot be null";
     private static final String MSG_TEXTURE_NULL = "Texture cannot be null";
+    @Nonnull
     private final JavaPlugin plugin;
+    @Nonnull
     private final String langFolderName;
+    @Nonnull
     private final File langFolder;
+    @Nonnull
     private final List<String> languages;
+    @Nonnull
     private final Map<String, Language> langMap;
     private final String colorTagRegex = "<[a-zA-Z0-9_]+>";
     private final Pattern pattern = Pattern.compile(this.colorTagRegex);
+    @Nonnull
     @Getter
     private String idPrefix = "";
+    @Nonnull
     private String itemGroupKey = "categories";
+    @Nonnull
     private String itemsKey = "items";
+    @Nonnull
     private String recipesKey = "recipes";
 
     @ParametersAreNonnullByDefault
@@ -136,6 +145,7 @@ public class LocalizationService {
         this.langMap.remove(langFilename);
     }
 
+    @Nonnull
     public final List<String> getLanguages() {
         return new ArrayList<>(this.languages);
     }
@@ -250,6 +260,7 @@ public class LocalizationService {
         return this.getItemBy(this.itemGroupKey, id, itemStack);
     }
 
+    @Nonnull
     public SlimefunItemStack getItem(@Nonnull String id, @Nonnull Material material, @Nonnull String... extraLore) {
         return this.getItemBy(this.itemsKey, id, material, extraLore);
     }
@@ -300,6 +311,7 @@ public class LocalizationService {
         this.recipesKey = recipesKey;
     }
 
+    @Nonnull
     private <T extends ItemStack> T appendLore(@Nonnull T itemStack, @Nullable String... extraLore) {
         Preconditions.checkArgument(itemStack != null, MSG_ITEMSTACK_NULL);
         if (extraLore != null && extraLore.length != 0) {

@@ -15,6 +15,7 @@ import java.util.List;
 
 public class ReloadCommand extends SubCommand {
     private static final String KEY = "reload";
+    @Nonnull
     private final ISFWorldEdit plugin;
 
     public ReloadCommand(@Nonnull ISFWorldEdit plugin) {

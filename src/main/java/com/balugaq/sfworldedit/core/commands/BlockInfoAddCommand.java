@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class BlockInfoAddCommand extends SubCommand {
     private static final String KEY = "blockinfoadd";
+    @Nonnull
     private final ISFWorldEdit plugin;
 
     public BlockInfoAddCommand(@Nonnull ISFWorldEdit plugin) {

@@ -58,6 +58,12 @@ commands:
   sfwconfirm:
     aliases:
       - /sconfirm
+  sfwsavefile:
+    aliases:
+      - /ssavefile
+  sfwloadfile:
+    aliases:
+      - /sloadfile
 
 permissions:
   sfworldedit.admin:
@@ -114,3 +120,9 @@ permissions:
   sfworldedit.command.confirm:
     description: Allows you to confirm the //sconfirm command
     default: true
+  sfworldedit.command.savefile:
+    description: Allows you to use the //ssavefile command
+    default: op
+  sfworldedit.command.loadfile:
+    description: Allows you to use the //sloadfile command
+    default: op

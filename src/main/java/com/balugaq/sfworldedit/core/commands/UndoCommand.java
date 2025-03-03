@@ -15,6 +15,7 @@ import java.util.UUID;
 
 public class UndoCommand extends SubCommand {
     private static final String KEY = "undo";
+    @Nonnull
     private final ISFWorldEdit plugin;
 
     public UndoCommand(@Nonnull ISFWorldEdit plugin) {

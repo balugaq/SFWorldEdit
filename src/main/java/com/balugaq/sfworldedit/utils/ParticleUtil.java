@@ -105,7 +105,7 @@ public class ParticleUtil {
         ParticleUtil.drawLineByDistance(plugin, particle, interval, distance, locations);
     }
 
-    public static void drawCubeByLocations(@Nonnull Plugin plugin, @Nonnull Particle particle, long interval, Location... locations) {
+    public static void drawCubeByLocations(@Nonnull Plugin plugin, @Nonnull Particle particle, long interval, @Nonnull Location... locations) {
         int time = 0;
         for (Location location : locations) {
             World world = location.getWorld();

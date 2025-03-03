@@ -14,6 +14,7 @@ import java.util.List;
 
 public class ConfirmCommand extends SubCommand {
     private static final String KEY = "confirm";
+    @Nonnull
     private final ISFWorldEdit plugin;
 
     public ConfirmCommand(@Nonnull ISFWorldEdit plugin) {

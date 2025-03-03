@@ -12,8 +12,11 @@ import java.io.IOException;
 import java.util.Iterator;
 
 public final class Language {
+    @Nonnull
     private final String lang;
+    @Nonnull
     private final File currentFile;
+    @Nonnull
     private final FileConfiguration currentConfig;
 
     @ParametersAreNonnullByDefault

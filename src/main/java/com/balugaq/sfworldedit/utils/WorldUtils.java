@@ -17,12 +17,21 @@ import org.bukkit.Warning;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.profile.PlayerProfile;
+import org.bukkit.profile.PlayerTextures;
+import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,15 +39,27 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 public class WorldUtils {
     public static final boolean ALLOW_UNDO = SFWorldedit.getInstance().getConfigManager().isAllowUndo();
+    @Nullable
+    protected static Constructor<?> craftPlayerProfileConstructor;
+    @Nullable
     protected static Class<?> craftBlockStateClass;
+    @Nullable
     protected static Field interfaceBlockDataField;
+    @Nullable
     protected static Field blockPositionField;
+    @Nullable
     protected static Field worldField;
+    @Nullable
     protected static Field weakWorldField;
+    @Nullable
+    protected static Class<?> craftPlayerProfileClass;
+    protected static Class<?> craftSkullClass;
+    protected static Method setOwnerProfileMethod;
     protected static boolean success = false;
 
     static {
@@ -83,6 +104,7 @@ public class WorldUtils {
         }
     }
 
+    @Nonnull
     public static String locationToString(@Nonnull Location l) {
         if (l == null) {
             return SFWorldedit.getInstance().getLocalizationService().getString("messages.error.unknown-location");
@@ -192,6 +214,56 @@ public class WorldUtils {
         }
     }
 
+    public static void doSimpleWorldEdit(@Nonnull Location pos1, @Nonnull Location pos2, @Nonnull Consumer<Location> consumer, @Nonnull Runnable ending) {
+        if (pos1 == null || pos2 == null) {
+            return;
+        }
+
+        final int downX = Math.min(pos1.getBlockX(), pos2.getBlockX());
+        final int upX = Math.max(pos1.getBlockX(), pos2.getBlockX());
+        final int downY = Math.min(pos1.getBlockY(), pos2.getBlockY());
+        final int upY = Math.max(pos1.getBlockY(), pos2.getBlockY());
+        final int downZ = Math.min(pos1.getBlockZ(), pos2.getBlockZ());
+        final int upZ = Math.max(pos1.getBlockZ(), pos2.getBlockZ());
+
+        final World world = pos1.getWorld();
+        final Map<ChunkData, Set<Location>> chunks = new HashMap<>();
+
+        for (int x = downX; x <= upX; x++) {
+            for (int y = downY; y <= upY; y++) {
+                for (int z = downZ; z <= upZ; z++) {
+                    final ChunkData chunkData = new ChunkData(world, x >> 4, z >> 4);
+                    if (chunks.containsKey(chunkData)) {
+                        chunks.get(chunkData).add(new Location(world, x, y, z));
+                    } else {
+                        final Set<Location> locations = new HashSet<>();
+                        locations.add(new Location(world, x, y, z));
+                        chunks.put(chunkData, locations);
+                    }
+                }
+            }
+        }
+
+        List<Content> backup = new ArrayList<>();
+        final Iterator<ChunkData> iterator = chunks.keySet().iterator();
+        final int chunkLimitPerSecond = SFWorldedit.getInstance().getConfigManager().getModificationChunkPerSecond();
+        for (int i = 0; i < chunks.size() && iterator.hasNext(); i += chunkLimitPerSecond) {
+            Debug.debug("WorldEdit: processing chunk " + i + "/" + chunks.size());
+            Bukkit.getScheduler().runTaskLater(SFWorldedit.getInstance(), () -> {
+                Debug.debug("WorldEdit: processing task...");
+                for (int j = 0; j < chunkLimitPerSecond && iterator.hasNext(); j++) {
+                    final ChunkData chunkData = iterator.next();
+                    final Set<Location> locations = chunks.get(chunkData);
+                    for (Location location : locations) {
+                        consumer.accept(location);
+                    }
+                }
+            }, 20L * i / chunkLimitPerSecond);
+        }
+
+        Bukkit.getScheduler().runTaskLater(SFWorldedit.getInstance(), ending, 20L * chunks.size() / chunkLimitPerSecond);
+    }
+
     public static long getRange(@Nonnull Location pos1, @Nonnull Location pos2) {
         if (pos1 == null || pos2 == null) {
             return 0;
@@ -205,16 +277,17 @@ public class WorldUtils {
         return (long) (Math.abs(upX - downX) + 1) * (Math.abs(upY - downY) + 1) * (Math.abs(upZ - downZ) + 1);
     }
 
-    public static boolean isSlimefunBlock(Location location) {
+    public static boolean isSlimefunBlock(@Nonnull Location location) {
         return StorageCacheUtils.hasBlock(location);
     }
 
-    public static BukkitContent getBukkitContent(Location location) {
+    @Nonnull
+    public static BukkitContent getBukkitContent(@Nonnull Location location) {
         return new BukkitContent(location, location.getBlock().getState());
     }
 
-    @SuppressWarnings("unchecked")
-    public static SFContent getSFContent(Location location) {
+    @Nonnull
+    public static SFContent getSFContent(@Nonnull Location location) {
         SlimefunItem item = StorageCacheUtils.getSfItem(location);
         String id = null;
         if (item != null) {

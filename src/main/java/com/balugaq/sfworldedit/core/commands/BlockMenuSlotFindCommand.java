@@ -24,6 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class BlockMenuSlotFindCommand extends SubCommand {
     private static final String KEY = "blockmenuslotfind";
+    @Nonnull
     private final ISFWorldEdit plugin;
 
     public BlockMenuSlotFindCommand(@Nonnull ISFWorldEdit plugin) {

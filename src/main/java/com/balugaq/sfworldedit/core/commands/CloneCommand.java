@@ -34,6 +34,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class CloneCommand extends SubCommand {
     private static final String KEY = "clone";
     private final List<String> FLAGS = List.of("override");
+    @Nonnull
     private final ISFWorldEdit plugin;
 
     public CloneCommand(@Nonnull ISFWorldEdit plugin) {

@@ -5,6 +5,7 @@ import lombok.experimental.UtilityClass;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
@@ -104,6 +105,14 @@ public class ReflectionUtil {
             } else {
                 return getDeclaredFieldsRecursively(clazz, fieldName);
             }
+        }
+    }
+
+    public static @Nullable Constructor<?> getConstructor(@Nonnull Class<?> clazz, Class<?>... parameterTypes) {
+        try {
+            return clazz.getConstructor(parameterTypes);
+        } catch (NoSuchMethodException e) {
+            return null;
         }
     }
 }

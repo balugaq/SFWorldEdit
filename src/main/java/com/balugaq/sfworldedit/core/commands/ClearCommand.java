@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class ClearCommand extends SubCommand {
     private static final String KEY = "clear";
+    @Nonnull
     private final ISFWorldEdit plugin;
 
     public ClearCommand(@Nonnull ISFWorldEdit plugin) {

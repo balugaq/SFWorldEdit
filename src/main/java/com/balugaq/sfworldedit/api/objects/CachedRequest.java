@@ -6,6 +6,7 @@ import javax.annotation.Nonnull;
 
 @Getter
 public class CachedRequest {
+    @Nonnull
     private final Runnable request;
 
     public CachedRequest(@Nonnull Runnable request) {

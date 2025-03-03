@@ -2,6 +2,9 @@ package com.balugaq.sfworldedit.utils;
 
 import com.balugaq.sfworldedit.implementation.SFWorldedit;
 
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+
 public class Debug {
     public static void info(String message) {
         SFWorldedit.getInstance().getLogger().info(message);
@@ -23,11 +26,15 @@ public class Debug {
         SFWorldedit.getInstance().getLogger().severe(message);
     }
 
-    public static void debug(String message) {
+    public static void debug(@Nonnull String message) {
         SFWorldedit.getInstance().debug(message);
     }
 
-    public static void trace(Throwable e) {
+    public static void debug(@Nullable Object object) {
+        debug(object == null ? "null" : object.toString());
+    }
+
+    public static void trace(@Nonnull Throwable e) {
         e.printStackTrace();
     }
 }

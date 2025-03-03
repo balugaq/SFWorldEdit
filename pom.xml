@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.balugaq.sfworldedit</groupId>
     <artifactId>SFWorldedit</artifactId>
-    <version>48</version>
+    <version>49</version>
 
     <pluginRepositories>
         <pluginRepository>

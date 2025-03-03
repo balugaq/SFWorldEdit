@@ -22,6 +22,7 @@ public class RuleCommand extends SubCommand {
         RULES.put("limitChunkPerSecond", "worldedit.modification-chunk-limit-per-second");
     }
 
+    @Nonnull
     private final ISFWorldEdit plugin;
 
     public RuleCommand(@Nonnull ISFWorldEdit plugin) {

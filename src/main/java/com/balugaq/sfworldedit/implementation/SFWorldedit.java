@@ -13,6 +13,11 @@ import lombok.Getter;
 import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
+import org.bukkit.block.Block;
+import org.bukkit.block.Skull;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
@@ -28,17 +33,25 @@ import java.text.MessageFormat;
  */
 @SuppressWarnings("unused")
 @Getter
-public class SFWorldedit extends ISFWorldEdit {
+public class SFWorldedit extends ISFWorldEdit implements Listener {
     private static final String DEFAULT_LANGUAGE = "zh-CN";
     private static final int RECOMMENDED_JAVA_VERSION = 17;
     private static final MinecraftVersion RECOMMENDED_MC_VERSION = MinecraftVersion.MINECRAFT_1_16;
+    @Nullable
     private static SFWorldedit instance;
+    @Nonnull
     private final String username;
+    @Nonnull
     private final String repo;
+    @Nonnull
     private final String branch;
+    @Nullable
     private CommandManager commandManager;
+    @Nullable
     private ConfigManager configManager;
+    @Nullable
     private LocalizationService localizationService;
+    @Nullable
     private MinecraftVersion minecraftVersion;
     private int javaVersion;
 
@@ -60,6 +73,7 @@ public class SFWorldedit extends ISFWorldEdit {
         return SFWorldedit.instance;
     }
 
+    @Nonnull
     public static String getDefaultLanguage() {
         return DEFAULT_LANGUAGE;
     }

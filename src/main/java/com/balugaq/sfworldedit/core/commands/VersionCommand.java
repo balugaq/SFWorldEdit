@@ -13,6 +13,7 @@ import java.util.List;
 
 public class VersionCommand extends SubCommand {
     private static final String KEY = "version";
+    @Nonnull
     private final ISFWorldEdit plugin;
 
     public VersionCommand(@Nonnull ISFWorldEdit plugin) {

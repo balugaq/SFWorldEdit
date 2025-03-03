@@ -14,6 +14,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class HelpCommand extends SubCommand {
     private static final String KEY = "help";
+    @Nonnull
     private final ISFWorldEdit plugin;
 
     public HelpCommand(@Nonnull ISFWorldEdit plugin) {

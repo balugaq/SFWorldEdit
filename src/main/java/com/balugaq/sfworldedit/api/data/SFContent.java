@@ -1,13 +1,22 @@
 package com.balugaq.sfworldedit.api.data;
 
+import com.balugaq.sfworldedit.utils.Debug;
+import com.balugaq.sfworldedit.utils.WorldUtils;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItem;
+import io.github.thebusybiscuit.slimefun4.api.items.SlimefunItemStack;
 import io.github.thebusybiscuit.slimefun4.implementation.Slimefun;
 import lombok.Getter;
 import me.mrCookieSlime.Slimefun.api.inventory.BlockMenu;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.BlockState;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 
+import javax.annotation.Nonnull;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Map;
 
 @Getter
@@ -17,12 +26,16 @@ public class SFContent extends BukkitContent {
     private final Map<String, String> data;
     private final boolean ticking;
 
-    public SFContent(Location location, BlockState state, String id, Map<Integer, ItemStack> menu, Map<String, String> data, boolean ticking) {
+    public SFContent(@Nonnull Location location, @Nonnull BlockState state, String id, Map<Integer, ItemStack> menu, Map<String, String> data, boolean ticking) {
         super(location, state);
         this.id = id;
         this.menu = menu;
         this.data = data;
         this.ticking = ticking;
+    }
+
+    public static int getIdentifier() {
+        return BukkitContent.getIdentifier() | 4;
     }
 
     @Override

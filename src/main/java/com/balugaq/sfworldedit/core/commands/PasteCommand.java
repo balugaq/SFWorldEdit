@@ -1,9 +1,10 @@
 package com.balugaq.sfworldedit.core.commands;
 
+import com.balugaq.sfworldedit.api.Preparable;
 import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
+import com.balugaq.sfworldedit.implementation.SFWorldedit;
 import com.balugaq.sfworldedit.utils.CommandUtil;
-import com.balugaq.sfworldedit.utils.Debug;
 import com.balugaq.sfworldedit.utils.PermissionUtil;
 import com.balugaq.sfworldedit.utils.WorldUtils;
 import com.xzavier0722.mc.plugin.slimefun4.storage.util.StorageCacheUtils;
@@ -24,20 +25,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
-import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class PasteCommand extends SubCommand {
+public class PasteCommand extends SubCommand implements Preparable {
     private static final String KEY = "paste";
     private static final List<String> FLAGS = List.of("override", "force");
     @Nonnull
@@ -147,7 +146,18 @@ public class PasteCommand extends SubCommand {
         skin = skin0;
         isHead = isHead0;
 
+        final UUID uuid = player.getUniqueId();
+        final boolean prepareMode = hasPreparedArgs(args);
+        if (isPreparing(uuid) || !prepareMode) {
+            removeDisplayGroupFor(uuid);
+        }
+
         WorldUtils.doWorldEdit(player, pos1, pos2, (location -> {
+            if (prepareMode) {
+                display(uuid, location, t);
+                return;
+            }
+
             final Block targetBlock = location.getBlock();
             sfItem.callItemHandler(BlockPlaceHandler.class, handler -> handler.onPlayerPlace(
                     new BlockPlaceEvent(
@@ -172,6 +182,11 @@ public class PasteCommand extends SubCommand {
                 count.addAndGet(1);
             }
         }), () -> {
+            if (prepareMode) {
+                getDisplayGroup(uuid).getDisplays().forEach((name, display) -> {
+                    display.setMetadata(SFWorldedit.getInstance().getName(), new FixedMetadataValue(SFWorldedit.getInstance(), true));
+                });
+            }
             plugin.send(player, "command.paste.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
         });
 
@@ -208,6 +223,8 @@ public class PasteCommand extends SubCommand {
                 left.add("-" + flag);
             }
         }
+
+        left.addAll(prepareArgs(args));
         return left;
     }
 }

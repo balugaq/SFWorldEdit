@@ -4,6 +4,7 @@ import com.balugaq.sfworldedit.api.objects.enums.MinecraftVersion;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
 import com.balugaq.sfworldedit.core.managers.CommandManager;
 import com.balugaq.sfworldedit.core.managers.ConfigManager;
+import com.balugaq.sfworldedit.core.managers.DisplayManager;
 import com.balugaq.sfworldedit.core.services.LocalizationService;
 import com.balugaq.sfworldedit.utils.Debug;
 import com.balugaq.sfworldedit.utils.SlimefunItemUtil;
@@ -13,11 +14,7 @@ import lombok.Getter;
 import net.guizhanss.guizhanlibplugin.updater.GuizhanUpdater;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.Block;
-import org.bukkit.block.Skull;
-import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import javax.annotation.Nonnull;
@@ -49,6 +46,8 @@ public class SFWorldedit extends ISFWorldEdit implements Listener {
     private CommandManager commandManager;
     @Nullable
     private ConfigManager configManager;
+    @Nullable
+    private DisplayManager displayManager;
     @Nullable
     private LocalizationService localizationService;
     @Nullable
@@ -135,6 +134,10 @@ public class SFWorldedit extends ISFWorldEdit implements Listener {
             Debug.warning(getString("messages.startup.register-commands-failed"));
         }
 
+        Debug.info(getString("messages.startup.loading-display-manager"));
+        this.displayManager = new DisplayManager(this);
+        this.displayManager.onLoad();
+
         Debug.info(getString("messages.startup.done"));
     }
 
@@ -143,6 +146,11 @@ public class SFWorldedit extends ISFWorldEdit implements Listener {
         Preconditions.checkArgument(instance != null, "SFWorldedit has not been enabled yet！");
 
         SlimefunItemUtil.unregisterAllItems();
+
+        if (this.displayManager != null) {
+            this.displayManager.onUnload();
+        }
+        this.displayManager = null;
 
         if (this.commandManager != null) {
             this.commandManager.onUnload();

@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.balugaq.sfworldedit</groupId>
   <artifactId>SFWorldedit</artifactId>
-  <version>49</version>
+  <version>50</version>
   <build>
     <sourceDirectory>${basedir}/src/main/java</sourceDirectory>
     <defaultGoal>clean package</defaultGoal>
@@ -78,6 +78,10 @@
     <repository>
       <id>bg-repo</id>
       <url>https://repo.bg-software.com/repository/api/</url>
+    </repository>
+    <repository>
+      <id>org.metamechanists</id>
+      <url>https://repo.metamechanists.org/releases/</url>
     </repository>
   </repositories>
   <pluginRepositories>

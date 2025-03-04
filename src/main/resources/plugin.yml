@@ -64,6 +64,12 @@ commands:
   sfwloadfile:
     aliases:
       - /sloadfile
+  sfwmove:
+    aliases:
+      - /smove
+  sfwclearprojectile:
+    aliases:
+      - /sclearprojectile
 
 permissions:
   sfworldedit.admin:
@@ -125,4 +131,10 @@ permissions:
     default: op
   sfworldedit.command.loadfile:
     description: Allows you to use the //sloadfile command
+    default: op
+  sfworldedit.command.move:
+    description: Allows you to use the //smove command
+    default: op
+  sfworldedit.command.clearprojectile:
+    description: Allows you to use the //sclearprojectile command
     default: op

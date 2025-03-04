@@ -202,6 +202,7 @@ public class LocalizationService {
         return this.getStringList(path).stream().map(this::color).toList().toArray(new String[0]);
     }
 
+    @Nonnull
     protected JavaPlugin getPlugin() {
         return this.plugin;
     }

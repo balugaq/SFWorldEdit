@@ -4,6 +4,7 @@ import com.balugaq.sfworldedit.api.data.BukkitContent;
 import com.balugaq.sfworldedit.api.data.ChunkData;
 import com.balugaq.sfworldedit.api.data.Content;
 import com.balugaq.sfworldedit.api.data.SFContent;
+import com.balugaq.sfworldedit.api.objects.enums.Facing;
 import com.balugaq.sfworldedit.implementation.SFWorldedit;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
 import com.xzavier0722.mc.plugin.slimefun4.storage.controller.SlimefunBlockData;
@@ -17,21 +18,14 @@ import org.bukkit.Warning;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.profile.PlayerProfile;
-import org.bukkit.profile.PlayerTextures;
-import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -39,7 +33,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.UUID;
 import java.util.function.Consumer;
 
 public class WorldUtils {
@@ -316,5 +309,27 @@ public class WorldUtils {
         }
 
         return new SFContent(location, location.getBlock().getState(), id, menu, data, true);
+    }
+
+    @Nonnull
+    public static Facing getFacing(float yaw, float pitch) {
+        yaw = yaw % 360;
+        if (yaw < 0) yaw += 360;
+
+        if (pitch > 45) {
+            return Facing.NY;
+        } else if (pitch < -45) {
+            return Facing.PY;
+        }
+
+        if (yaw >= 315 || yaw < 45) {
+            return Facing.PZ;
+        } else if (yaw >= 45 && yaw < 135) {
+            return Facing.NX;
+        } else if (yaw >= 135 && yaw < 225) {
+            return Facing.NZ;
+        } else {
+            return Facing.PX;
+        }
     }
 }

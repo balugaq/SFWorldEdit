@@ -8,7 +8,6 @@ import org.bukkit.block.BlockState;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
-import java.net.MalformedURLException;
 
 @Getter
 public class BukkitContent extends Content {

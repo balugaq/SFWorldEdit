@@ -11,10 +11,12 @@ import com.balugaq.sfworldedit.core.commands.BlockMenuSlotFindCommand;
 import com.balugaq.sfworldedit.core.commands.BlockMenuSlotSetCommand;
 import com.balugaq.sfworldedit.core.commands.ClearCommand;
 import com.balugaq.sfworldedit.core.commands.ClearPosCommand;
+import com.balugaq.sfworldedit.core.commands.ClearProjectileCommand;
 import com.balugaq.sfworldedit.core.commands.CloneCommand;
 import com.balugaq.sfworldedit.core.commands.ConfirmCommand;
 import com.balugaq.sfworldedit.core.commands.HelpCommand;
 import com.balugaq.sfworldedit.core.commands.LoadFileCommand;
+import com.balugaq.sfworldedit.core.commands.MoveCommand;
 import com.balugaq.sfworldedit.core.commands.PasteCommand;
 import com.balugaq.sfworldedit.core.commands.ReloadCommand;
 import com.balugaq.sfworldedit.core.commands.RuleCommand;
@@ -163,6 +165,8 @@ public class CommandManager implements IManager {
         commands.add(new BlockMenuSlotFindCommand(plugin));
         commands.add(new SaveFileCommand(plugin));
         commands.add(new LoadFileCommand(plugin));
+        commands.add(new MoveCommand(plugin));
+        commands.add(new ClearProjectileCommand(plugin));
         runParticleTask();
     }
 

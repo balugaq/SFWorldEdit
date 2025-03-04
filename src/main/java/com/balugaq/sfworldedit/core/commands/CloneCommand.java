@@ -1,7 +1,9 @@
 package com.balugaq.sfworldedit.core.commands;
 
+import com.balugaq.sfworldedit.api.Preparable;
 import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
+import com.balugaq.sfworldedit.implementation.SFWorldedit;
 import com.balugaq.sfworldedit.utils.CommandUtil;
 import com.balugaq.sfworldedit.utils.PermissionUtil;
 import com.balugaq.sfworldedit.utils.WorldUtils;
@@ -21,6 +23,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 
 import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -29,9 +32,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class CloneCommand extends SubCommand {
+public class CloneCommand extends SubCommand implements Preparable {
     private static final String KEY = "clone";
     private final List<String> FLAGS = List.of("override");
     @Nonnull
@@ -85,12 +89,22 @@ public class CloneCommand extends SubCommand {
         final int dz = playerLocation.getBlockZ() - pos1.getBlockZ();
 
         final Map<ChunkPosition, Set<Location>> tickingBlocks = Slimefun.getTickerTask().getLocations();
+        final UUID uuid = player.getUniqueId();
+        final boolean prepareMode = hasPreparedArgs(args);
+        if (isPreparing(uuid) || !prepareMode) {
+            removeDisplayGroupFor(uuid);
+        }
 
         WorldUtils.doWorldEdit(player, pos1, pos2, (fromLocation -> {
             final Block fromBlock = fromLocation.getBlock();
             final Block toBlock = playerLocation.getWorld().getBlockAt(fromLocation.getBlockX() + dx, fromLocation.getBlockY() + dy, fromLocation.getBlockZ() + dz);
-            final SlimefunItem slimefunItem = StorageCacheUtils.getSfItem(fromLocation);
             final Location toLocation = toBlock.getLocation();
+            if (prepareMode) {
+                display(uuid, toLocation, fromBlock.getBlockData());
+                return;
+            }
+
+            final SlimefunItem slimefunItem = StorageCacheUtils.getSfItem(fromLocation);
 
             // If vanilla block, just copy block state.
             // If Slimefun block, should create Slimefun Block first, then copy BlockState.
@@ -174,6 +188,11 @@ public class CloneCommand extends SubCommand {
                 Slimefun.getTickerTask().disableTicker(toLocation);
             }
         }), () -> {
+            if (prepareMode) {
+                getDisplayGroup(uuid).getDisplays().forEach((name, display) -> {
+                    display.setMetadata(SFWorldedit.getInstance().getName(), new FixedMetadataValue(SFWorldedit.getInstance(), true));
+                });
+            }
             plugin.send(player, "command.clone.success", count.get(), System.currentTimeMillis() - currentMillSeconds);
         });
 

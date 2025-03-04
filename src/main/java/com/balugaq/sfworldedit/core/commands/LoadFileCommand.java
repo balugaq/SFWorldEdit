@@ -1,10 +1,12 @@
 package com.balugaq.sfworldedit.core.commands;
 
+import com.balugaq.sfworldedit.api.Preparable;
 import com.balugaq.sfworldedit.api.data.BukkitContent;
 import com.balugaq.sfworldedit.api.data.Content;
 import com.balugaq.sfworldedit.api.data.SFContent;
 import com.balugaq.sfworldedit.api.objects.SubCommand;
 import com.balugaq.sfworldedit.api.plugin.ISFWorldEdit;
+import com.balugaq.sfworldedit.implementation.SFWorldedit;
 import com.balugaq.sfworldedit.utils.PermissionUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -21,6 +23,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 import org.yaml.snakeyaml.external.biz.base64Coder.Base64Coder;
@@ -36,8 +39,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.UUID;
 
-public class LoadFileCommand extends SubCommand {
+public class LoadFileCommand extends SubCommand implements Preparable {
     private static final String KEY = "loadFile";
     @Nonnull
     private final ISFWorldEdit plugin;
@@ -234,13 +238,30 @@ public class LoadFileCommand extends SubCommand {
         final int dx = playerLocation.getBlockX() - originPos1.getBlockX();
         final int dy = playerLocation.getBlockY() - originPos1.getBlockY();
         final int dz = playerLocation.getBlockZ() - originPos1.getBlockZ();
+        final UUID uuid = player.getUniqueId();
+        final boolean prepareMode = hasPreparedArgs(args);
+        if (isPreparing(uuid) || !prepareMode) {
+            removeDisplayGroupFor(uuid);
+        }
+
         for (Content contentObj : contents) {
             Location fromLocation = contentObj.getLocation().clone();
             Location newLocation = playerLocation.getWorld().getBlockAt(fromLocation.getBlockX() + dx, fromLocation.getBlockY() + dy, fromLocation.getBlockZ() + dz).getLocation();
-            contentObj.setLocation(newLocation);
-            contentObj.action();
+            if (prepareMode) {
+                if (contentObj instanceof BukkitContent bukkitContent) {
+                    display(uuid, newLocation, bukkitContent.getState().getBlockData());
+                }
+            } else {
+                contentObj.setLocation(newLocation);
+                contentObj.action();
+            }
         }
 
+        if (prepareMode) {
+            getDisplayGroup(uuid).getDisplays().forEach((name, display) -> {
+                display.setMetadata(SFWorldedit.getInstance().getName(), new FixedMetadataValue(SFWorldedit.getInstance(), true));
+            });
+        }
 
         return true;
     }
@@ -249,7 +270,11 @@ public class LoadFileCommand extends SubCommand {
     @Nonnull
     @ParametersAreNonnullByDefault
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command command, @Nonnull String label, @Nonnull String[] args) {
-        return new ArrayList<>();
+        if (!PermissionUtil.hasPermission(commandSender, this)) {
+            return new ArrayList<>();
+        }
+
+        return prepareArgs(args);
     }
 
     @Override

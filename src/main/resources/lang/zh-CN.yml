@@ -11,6 +11,7 @@ messages:
     null-minecraft-version: "无法获取 Minecraft 版本！"
     unknown-minecraft-version: "无法识别到 Minecraft 版本！请谨慎使用此插件！"
     old-java-version: "Java 版本过低，请使用 Java {0} 或以上版本！"
+    loading-display-manager: "正在加载投影管理器..."
   shutdown:
     goodbye: "成功禁用此附属"
   command:
@@ -25,8 +26,8 @@ messages:
         - "&b//sblockinfoadd <key> <value> &7- &e对选中区域的 Slimefun 方块增加 Slimefun 方块信息"
         - "&b//sblockinforemove <key> &7- &e对选中区域的 Slimefun 方块移除 Slimefun 方块信息"
         - "&b//sblockmenuslotset <slot> &7- &e设置选中区域的 Slimefun 方块的方块菜单槽为你手中的物品"
-        - "&b//spaste <sfid> [-override|-o] [-force|-f] &7- &e粘贴指定的 Slimefun 方块到选中区域"
-        - "&b//sclone [-override|-o] &7- &e将选中区域克隆到你所处的位置"
+        - "&b//spaste <sfid> [-override|-o] [-force|-f] [-prepare|-p] &7- &e粘贴指定的 Slimefun 方块到选中区域"
+        - "&b//sclone [-override|-o] [-prepare|-p] &7- &e将选中区域克隆到你所处的位置"
         - "&b//sclear [-callhandler|-c] [-skipvanilla|-v] [-skipslimefun|-s] &7- &e清除选中区域的方块"
         - "&b//sclearpos &7- &e清除你标记的位置"
         - "&b//sreload &7- &e重新加载配置文件"
@@ -36,7 +37,9 @@ messages:
         - "&b//sconfirm &7- &e确认操作"
         - "&b//sblockmenuslotfind <slot> &7- &e查找符合条件的方块菜单"
         - "&b//ssavefile &7- &e保存选中区域的方块到文件"
-        - "&b//sloadfile &7- &e加载文件中的方块到选中区域"
+        - "&b//sloadfile <file_name> [-prepare|-p] &7- &e加载文件中的方块到选中区域"
+        - "&b//smove <distance|\"cancel\"> &7- &e移动投影"
+        - "&b//sclearprojectile &7- &e清除投影"
         - ""
         - "&b======================"
         - "&b作者（们）：&ebalugaq"
@@ -70,9 +73,11 @@ messages:
           - "&bsfid: &e指定的 Slimefun 方块 ID"
           - "&b[-override|-o]: &e覆盖已有 Slimefun 方块"
           - "&b[-force|-f]: &e跳过 NotPlaceable 检查，强制粘贴指定的 Slimefun 方块"
+          - "&b[-prepare|-p]: &e加载预制投影"
         clone:
           - "&b//sclone [-override|-o] &7- &e将选中区域克隆到你所处的位置"
           - "&b[-override|-o]: &e覆盖已有方块"
+          - "&b[-prepare|-p]: &e加载预制投影"
         clear:
           - "&b//sclear [-callhandler|-c] [-skipvanilla|-s] &7- &e清除选中区域的方块"
           - "&b[-callhandler|-c]: &e调用粘液方块的 onPlayerBreak 方法"
@@ -99,6 +104,13 @@ messages:
           - "&b//ssavefile &7- &e保存选中区域的方块到文件"
         loadfile:
           - "&b//sloadfile <file_name> &7- &e加载文件中的方块到选中区域"
+          - "&b[-prepare|-p]: &e加载预制投影"
+        move:
+          - "&b//smove <distance|\"cancel\"> &7- &e移动投影"
+          - "&bdistance: &e移动距离 ( 正数为正方向，负数为反方向 )"
+          - "&b\"cancel\": &e取消移动"
+        clearprojectile:
+          - "&b//sclearprojectile &7- &e清除投影"
     setpos1:
       success: "&a已标记第一个位置 {0}."
       success-with-range: "&a已标记第一个位置 {0}，共 &e{1} &a个方块."
@@ -144,6 +156,8 @@ messages:
     loadfile:
       start: "&a正在加载文件..."
       success: "&a加载文件成功。"
+    move:
+      success: "&a已移动投影。"
   error:
     unknown-subcommand: "&c未知子指令 {0}。"
     unknown-location: "&c未知位置。"

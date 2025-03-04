@@ -6,7 +6,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.balugaq.sfworldedit</groupId>
     <artifactId>SFWorldedit</artifactId>
-    <version>49</version>
+    <version>50</version>
 
     <pluginRepositories>
         <pluginRepository>
@@ -119,6 +119,10 @@
             <id>bg-repo</id>
             <url>https://repo.bg-software.com/repository/api/</url>
         </repository>
+        <repository>
+            <id>org.metamechanists</id>
+            <url>https://repo.metamechanists.org/releases/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -172,6 +176,19 @@
             <artifactId>GuizhanLibPlugin</artifactId>
             <version>1.7.6</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.metamechanists</groupId>
+            <artifactId>MetaLib</artifactId>
+            <version>46</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.metamechanists</groupId>
+            <artifactId>DisplayModelLib</artifactId>
+            <version>3</version>
+            <scope>compile</scope>
         </dependency>
     </dependencies>
 </project>

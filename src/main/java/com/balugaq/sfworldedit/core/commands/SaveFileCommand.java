@@ -74,7 +74,6 @@ public class SaveFileCommand extends SubCommand {
                 c.set("format", format);
                 c.set("amountMap", amountMap);
             }
-            Location location = bc.getLocation();
         }
 
         if (content instanceof SFContent sc) {

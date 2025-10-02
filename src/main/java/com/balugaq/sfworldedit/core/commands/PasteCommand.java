@@ -38,7 +38,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class PasteCommand extends SubCommand implements Preparable {
     private static final String KEY = "paste";
-    private static final List<String> FLAGS = List.of("override", "force");
+    private static final List<String> FLAGS = List.of("override", "force", "withoutblock");
     @Nonnull
     private final ISFWorldEdit plugin;
 
@@ -60,6 +60,7 @@ public class PasteCommand extends SubCommand implements Preparable {
 
         final boolean override = CommandUtil.hasFlag(args, "override") || CommandUtil.hasFlag(args, "o");
         final boolean force = CommandUtil.hasFlag(args, "force") || CommandUtil.hasFlag(args, "f");
+        final boolean withoutblock = CommandUtil.hasFlag(args, "withoutblock") || CommandUtil.hasFlag(args, "w");
         int length = args.length;
         if (override) {
             length--;
@@ -174,9 +175,11 @@ public class PasteCommand extends SubCommand implements Preparable {
                 Slimefun.getDatabaseManager().getBlockDataController().removeBlock(location);
             }
             if (!StorageCacheUtils.hasBlock(location)) {
-                targetBlock.setType(t);
-                if (isHead) {
-                    PlayerHead.setSkin(targetBlock, skin, false);
+                if (!withoutblock) {
+                    targetBlock.setType(t);
+                    if (isHead) {
+                        PlayerHead.setSkin(targetBlock, skin, false);
+                    }
                 }
                 Slimefun.getDatabaseManager().getBlockDataController().createBlock(location, sfid);
                 count.addAndGet(1);

@@ -124,9 +124,7 @@ public class CommandManager implements IManager {
 
     public void runParticleTask() {
         plugin.getServer().getScheduler().runTaskTimerAsynchronously(plugin, () -> {
-            Iterator<UUID> iterator = selection.keySet().iterator();
-            while (iterator.hasNext()) {
-                UUID uuid = iterator.next();
+            for (UUID uuid : selection.keySet()) {
                 Player player = Bukkit.getPlayer(uuid);
                 if (player == null) {
                     continue;

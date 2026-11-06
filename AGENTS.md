@@ -31,7 +31,7 @@
 | 包 | 职责 | 关键类 |
 | --- | --- | --- |
 | `api/plugin` | 插件抽象基类 | `ISFWorldEdit`（`getString` / `send` / `sendList`） |
-| `api/objects` | 命令与请求抽象 | `SubCommand`(implements `TabExecutor`)、`CachedRequest`、`enums.MinecraftVersion`、`enums.Facing` |
+| `api/objects` | 命令与请求抽象 | `SubCommand`(`TabExecutor`)、`CachedRequest`、`enums.MinecraftVersion`（record）、`enums.Facing` |
 | `api/data` | 数据模型 | `Content`(抽象 + `action()`)、`BukkitContent`、`SFContent`、`ChunkData`(record)、`Backup`(撤销栈)、`Language` |
 | `core/commands` | 20 个命令实现 | `PasteCommand`、`ClearCommand`、`CloneCommand`、`SaveFileCommand`、`LoadFileCommand`、`UndoCommand` 等 |
 | `core/managers` | 生命周期管理 | `IManager`(`onLoad`/`onUnload`)、`CommandManager`、`ConfigManager`、`DisplayManager` |
@@ -45,6 +45,7 @@
 
 ## 3. 技术栈与构建
 
+- **版本识别**：`MinecraftVersion` 采用 NetworksExpansion 的 `record (major, minor, patch)` 实现，由 `Bukkit.getMinecraftVersion()` 字符串解析，不枚举版本常量，26.x 天然可识别；约定常量为 `V1_20` / `V1_20_5` / `V1_21` / `V1_21_3` / `V1_21_4`，`UNKNOWN` = `(999,999,999)`。调用 `current()`、`isAtLeast(...)` / `isBefore(...)`、`humanize()`；判断 UNKNOWN 用 `equals(UNKNOWN)`（record 不能用 `==`）。
 - **构建**：`build.gradle.kts`（Gradle Kotlin DSL）+ `com.gradleup.shadow`；`defaultTasks("clean", "build")`；产物 `build/libs/SFWorldEdit-<version>.jar`（fat jar，relocation `org.bstats` → `com.balugaq.sfworldedit.bstats`，`minimize()`，排除 `META-INF/*`）。
 - **依赖**：全部声明在 `gradle/libs.versions.toml`，`build.gradle.kts` 只用 `libs.xxx` 引用。`compileOnly` 对应原 Maven `provided`，`implementation` 对应会被 shade 的 `compile`。
 - **version 注入**：`processResources { filesMatching("plugin.yml") { expand("version" to project.version.toString()) } }`，因此 `plugin.yml` 里必须写 `version: ${version}`。**不要改回 Maven 的 `${project.version}`**，否则 jar 内版本号是字面量，Bukkit 加载失败，且兼容性 workflow 从 jar 取版本号的检查会失效。
@@ -62,7 +63,7 @@
 1. `Preconditions.checkArgument(instance == null)` → `instance = this`
 2. `saveDefaultConfig()` → `new ConfigManager(this)` → `configManager.onLoad()`
 3. `new LocalizationService(this)` → `addLanguage(configManager.getLanguage())` → `addLanguage(DEFAULT_LANGUAGE="zh-CN")`
-4. `environmentCheck()`：MC 为 null 或 `< 1.16`、`javaVersion < 17` → `disablePlugin(this)` 并 `return`；`UNKNOWN` **只告警不禁用**
+4. `environmentCheck()`：`MinecraftVersion.current()` 解析 `Bukkit.getMinecraftVersion()`；MC 低于 1.16 或 `javaVersion < 17` → `disablePlugin(this)` 并 `return`；解析异常降级为 `UNKNOWN` 后只告警（`UNKNOWN` 被定义为最大版本，不阻止启动）
 5. `tryUpdate()`：`configManager.isAutoUpdate()` 且 `getDescription().getVersion().startsWith("Build")` 时才调用 `GuizhanUpdater.start(...)`（当前版本 `51` 不触发）
 6. `SFWItemsSetup.setup(this)` —— 会触发 `Constants` 静态初始化，依赖 `getInstance()` 与 localizationService 已就绪
 7. `new CommandManager(this)` → `onLoad()` → `registerCommands()`
@@ -141,7 +142,6 @@
 
 ## 8. 已知债务（改动时留意，不要当成"笔误"顺手改）
 
-- `MinecraftVersion` 枚举最高到 `1_22_6`，没有 26.x；`26.2` 会走 `UNKNOWN` 只告警分支。
 - `SFWorldedit` 构造器的自动更新 `branch = "master"`，而仓库默认分支是 `main`；当前版本号 `51` 不以 `Build` 开头，`tryUpdate()` 不会触发，暂无害。
 - 若干本地化 key 在两份 lang 中都不存在（如 `messages.save-all`、`commands.clearprojectile.success`、`error.file-not-found`），会触发 `severe("No localization found for path: ...")` 并原样返回路径。
 - `zh-CN.yml` 与 `en-US.yml` 不同步：中文版多出 `//srule`、`//sundo`、`//sconfirm` 等帮助行与若干 error 键；`-skipvanilla` 的短参数一个是 `-v` 一个是 `-s`。

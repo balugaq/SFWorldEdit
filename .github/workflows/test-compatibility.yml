@@ -53,6 +53,10 @@ jobs:
             25
           cache: gradle
 
+      # gradlew 在 git 里可能是 100644（Windows 提交时丢执行位），runner 上直接 ./gradlew 会 126
+      - name: Make Gradle wrapper executable
+        run: chmod +x gradlew
+
       - name: Build plugin
         run: |
           ./gradlew clean build -x test

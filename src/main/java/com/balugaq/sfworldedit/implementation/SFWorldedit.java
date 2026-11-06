@@ -33,7 +33,7 @@ import java.text.MessageFormat;
 public class SFWorldedit extends ISFWorldEdit implements Listener {
     private static final String DEFAULT_LANGUAGE = "zh-CN";
     private static final int RECOMMENDED_JAVA_VERSION = 17;
-    private static final MinecraftVersion RECOMMENDED_MC_VERSION = MinecraftVersion.MINECRAFT_1_16;
+    private static final MinecraftVersion RECOMMENDED_MC_VERSION = MinecraftVersion.of(1, 16);
     @Nullable
     private static SFWorldedit instance;
     @Nonnull
@@ -210,14 +210,19 @@ public class SFWorldedit extends ISFWorldEdit implements Listener {
     }
 
     private boolean environmentCheck() {
-        this.minecraftVersion = MinecraftVersion.getCurrentVersion();
+        try {
+            this.minecraftVersion = MinecraftVersion.current();
+        } catch (RuntimeException e) {
+            // 版本串格式超出预期时降级为 UNKNOWN，让告警分支接管而不是让 onEnable 抛异常
+            this.minecraftVersion = MinecraftVersion.UNKNOWN;
+        }
         this.javaVersion = NumberUtils.getJavaVersion();
         if (minecraftVersion == null) {
             Debug.warning(getString("messages.startup.null-minecraft-version"));
             return false;
         }
 
-        if (minecraftVersion == MinecraftVersion.UNKNOWN) {
+        if (minecraftVersion.equals(MinecraftVersion.UNKNOWN)) {
             Debug.warning(getString("messages.startup.unknown-minecraft-version"));
         }
 

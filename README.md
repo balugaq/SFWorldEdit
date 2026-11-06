@@ -106,7 +106,7 @@
 | 必需前置 | [Slimefun4](https://github.com/SlimefunGuguProject/Slimefun4) |
 | 可选前置 | GuizhanLibPlugin（自动更新；仅当版本号以 `Build` 开头时启用） |
 
-`MinecraftVersion` 枚举目前覆盖到 1.22.x；更新的服务端会被识别为 `UNKNOWN` 并只告警，不阻止启动。
+`MinecraftVersion` 采用 NetworksExpansion 的 record 实现，直接解析 `Bukkit.getMinecraftVersion()`，不枚举版本常量，因此 1.20.1 与 26.2 等新旧版本号都能正确识别。
 
 # 配置
 

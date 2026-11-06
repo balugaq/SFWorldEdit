@@ -1,0 +1,36 @@
+# Gradle Version Catalog
+# 依赖集中管理：build.gradle.kts 里用 `libs.xxx` 引用。
+# alias 一律 kebab-case，Kotlin DSL 访问时自动转驼峰（如 `paper-api` → `libs.paper.api`）。
+
+[versions]
+# Core（pom.xml 原值：spigot-api 1.21-R0.1-SNAPSHOT、Slimefun4 b39097e015 已在 JitPack 404）
+paper-api = "1.21.11-R0.1-SNAPSHOT"
+slimefun4 = "2025.1"
+
+# Tools（pom.xml 原值：bstats 3.0.2、findbugs 3.0.1u2、lombok 1.18.34、GuizhanLibPlugin 1.7.6）
+bstats = "3.2.1"
+findbugs-annotations = "3.0.1u2"
+lombok = "1.18.48"
+guizhan-lib-plugin = "2.5.0"
+
+# Plugins
+shadow = "9.6.1"
+
+[libraries]
+# Core
+paper-api = { module = "io.papermc.paper:paper-api", version.ref = "paper-api" }
+slimefun4 = { module = "com.github.SlimefunGuguProject:Slimefun4", version.ref = "slimefun4" }
+
+# Tools
+bstats = { module = "org.bstats:bstats-bukkit", version.ref = "bstats" }
+findbugs-annotations = { module = "com.google.code.findbugs:annotations", version.ref = "findbugs-annotations" }
+lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+# 该坐标在 Maven Central，不在 JitPack / CodeMC
+guizhan-lib-plugin = { module = "net.guizhanss:GuizhanLibPlugin", version.ref = "guizhan-lib-plugin" }
+
+[plugins]
+shadow = { id = "com.gradleup.shadow", version.ref = "shadow" }
+
+# 说明：原 pom.xml 的 org.metamechanists:MetaLib:46 与 DisplayModelLib:3
+# 所在仓库 repo.metamechanists.org 已全站 404，无法用坐标解析，
+# 改由 lib/*.jar 提供（build.gradle.kts 的 implementation(fileTree(...))），故不列入 catalog。

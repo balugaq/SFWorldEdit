@@ -1,0 +1,13 @@
+# To get started with Dependabot version updates, you'll need to specify which
+# package ecosystems to update and where the package manifests are located.
+# Please see the documentation for all configuration options:
+# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+
+version: 2
+updates:
+  - package-ecosystem: "gradle" # See documentation for possible values
+    directory: "/" # Location of package manifests
+    schedule:
+      # 注：yearly 在 GitHub Docs 中标注为 GHES 3.19+ 可用；若 github.com 不识别，
+      # 等价写法为 schedule.interval: "cron" + cronjob: "0 0 1 1 *"。
+      interval: "yearly"

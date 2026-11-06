@@ -3,7 +3,7 @@ author: balugaq
 description: A Slimefun addon that make Slimefun world-editable
 main: com.balugaq.sfworldedit.implementation.SFWorldedit
 website: https://github.com/balugaq/SFWorldedit
-version: ${project.version}
+version: ${version}
 api-version: 1.20
 depend:
   - Slimefun

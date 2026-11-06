@@ -96,3 +96,48 @@
 //sclearprojectile                # 清理投影实体
 ```
 
+
+# 环境要求
+
+| 项 | 要求 |
+| --- | --- |
+| 服务端 | Paper / Spigot，`api-version: 1.20`；CI 在 **1.20.1** 与 **26.2** 上验证 |
+| Java | 源码最低 Java 16，运行时要求 **Java ≥ 17**；本项目按 Java 21 编译 |
+| 必需前置 | [Slimefun4](https://github.com/SlimefunGuguProject/Slimefun4) |
+| 可选前置 | GuizhanLibPlugin（自动更新；仅当版本号以 `Build` 开头时启用） |
+
+`MinecraftVersion` 枚举目前覆盖到 1.22.x；更新的服务端会被识别为 `UNKNOWN` 并只告警，不阻止启动。
+
+# 配置
+
+`config.yml` 默认值：
+
+```yaml
+auto-update: true
+language: zh-CN
+worldedit:
+  modification-block-limit: 32768
+  modification-chunk-limit-per-second: 16
+  allow-undo: true
+  max-backups: 20
+config-version: 1
+debug: false
+```
+
+语言文件在 `lang/zh-CN.yml` 与 `lang/en-US.yml`；缺失键会在启动时自动补写回磁盘，但**不会覆盖**已有值。`debug: true` 时调试日志才会输出。
+
+# 构建
+
+```bash
+./gradlew clean build
+```
+
+产物 `build/libs/SFWorldEdit-51.jar`（fat jar）。依赖统一声明在 `gradle/libs.versions.toml`。
+
+> MetaLib / DisplayModelLib 的原 Maven 仓库 `repo.metamechanists.org` 已下线，这两个库改由 `lib/*.jar` 提供并随 shadow 打包；仓库恢复后可改回坐标依赖。
+
+CI 见 `.github/workflows/`：push 到 `main` 触发构建与兼容性测试；`gradle.properties` 里的版本号变更会自动创建 Release。
+
+# 反馈与许可
+
+问题反馈：[GitHub Issues](https://github.com/balugaq/SFWorldEdit/issues)。许可证见 [LICENSE](LICENSE)。

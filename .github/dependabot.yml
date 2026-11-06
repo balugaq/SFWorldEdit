@@ -8,6 +8,4 @@ updates:
   - package-ecosystem: "gradle" # See documentation for possible values
     directory: "/" # Location of package manifests
     schedule:
-      # 注：yearly 在 GitHub Docs 中标注为 GHES 3.19+ 可用；若 github.com 不识别，
-      # 等价写法为 schedule.interval: "cron" + cronjob: "0 0 1 1 *"。
-      interval: "yearly"
+      interval: "monthly"

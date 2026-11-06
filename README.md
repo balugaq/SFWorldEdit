@@ -49,7 +49,7 @@
 //spaste <sfid> -o -f
 ```
 
-## `//sclear` — 清空选区
+## `//sclear` - 清空选区
 
 ```text
 //sclear [-callhandler|-c] [-skipvanilla|-v] [-skipslimefun|-s]
